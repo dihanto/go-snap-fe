@@ -31,12 +31,14 @@ const Content = () => {
     }, [url]);
 
     return (
-        <div>
+        <div className=' lg:order-2 lg:w-1/2'>
             {photos.map((photo) => (
                 <div key={photo.id} className='bg-slate-200 pb-3'>
-                    <p className='py-2 pl-2'>{photo.user.username}</p>
-                    <img src={photo.photoUrl} alt={photo.title}></img>
-                    <p className='mt-3 text-sm pl-4 pb-3'>{photo.caption}</p>
+                    <p className='py-3 pl-2 lg:ml-[123px]'>{photo.user.username}</p>
+                    <div className='lg:flex lg:items-center lg:justify-center'>
+                        <img src={photo.photoUrl} alt={photo.title} className='rounded-sm'/>
+                    </div>
+                    <p className='mt-3 text-sm pl-4 pb-3 lg:ml-[118px]'>{photo.caption}</p>
                     <hr className='h-px bg-slate-700'/>    
                 </div>
             ))}
