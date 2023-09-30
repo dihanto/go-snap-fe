@@ -5,13 +5,11 @@ import Suggest from './suggest';
 
 function App() {
   return (
-    <div className="App container">
-      <div className="Header w-full mt-3 mx-2">
-        <p className="text-left ml-1 text-2xl"> Gosnap </p>
-      </div>
-      <div className="w-full my-5 mx-2 lg:flex lg:flex-wrap">
+    <div className="App container font-sans">
+      <Navbar />
+      <div className="lg:flex">
+        <div className='lg:w-1/5'>  </div>
           <Content />
-          <Navbar />
           <Suggest />
       </div>
     </div>

@@ -5,7 +5,7 @@ const Content = () => {
     const [photos, setPhotos] = useState([]);
 
     const getDataPhoto = async () => {
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTU3MTAxMTEsImlkIjoiMDIzYWVlMzYtNjZlNy00NjMwLTgzNWUtZTJmNjNlYzUwZjQ4IiwibGV2ZWwiOiJ1c2VyIiwidXNlcm5hbWUiOiJrdXJuaWF3YW4ifQ.ksmIzicu3Pg4Hi8X9l4IjjJJlLUSihrf6A6q8QLiORs';
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTYxMzExNjgsImlkIjoiMDIzYWVlMzYtNjZlNy00NjMwLTgzNWUtZTJmNjNlYzUwZjQ4IiwibGV2ZWwiOiJ1c2VyIiwidXNlcm5hbWUiOiJrdXJuaWF3YW4ifQ.9N_jemYoZQD2ye7cZbC_yZugp7LQq1c7BwCGiy_CBHY';
         try {
             const response = await fetch(url, {
                 method: 'GET',
@@ -31,15 +31,15 @@ const Content = () => {
     }, [url]);
 
     return (
-        <div className=' lg:order-2 lg:w-1/2'>
+        <div className='lg:w-3/5'>
             {photos.map((photo) => (
-                <div key={photo.id} className='bg-slate-200 pb-3'>
-                    <p className='py-3 pl-2 lg:ml-[123px]'>{photo.user.username}</p>
+                <div key={photo.id} className='bg-slate-100 pb-3 text-left text-sm'>
+                    <p className='lg:py-3 lg:ml-[230px]  font-semibold'>{photo.user.username}</p>
                     <div className='lg:flex lg:items-center lg:justify-center'>
                         <img src={photo.photoUrl} alt={photo.title} className='rounded-sm'/>
                     </div>
-                    <p className='mt-3 text-sm pl-4 pb-3 lg:ml-[118px]'>{photo.caption}</p>
-                    <hr className='h-px bg-slate-700'/>    
+                    <p className='mt-3 text-xs pl-4 pb-3 lg:ml-[190px]'>{photo.caption}</p>
+                    <div className='border border-solid bg-slate-500'> </div>
                 </div>
             ))}
         </div>
