@@ -2,15 +2,15 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PostData from './post';
 import Home from './home';
-import Navbar from './navbar';
+import Register from './register';
 
 function App() {
   return (
     <Router>
-      <Navbar />
       <Routes>
           <Route path='/post' element={<PostData />} />
           <Route path='/' element={<Home />} />
+          <Route path='/register' element={<Register />} />
         </Routes>
     </Router>
   );
