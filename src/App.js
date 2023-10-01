@@ -1,18 +1,18 @@
-import './App.css';
-import Content from './content';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import PostData from './post';
+import Home from './home';
 import Navbar from './navbar';
-import Suggest from './suggest';
 
 function App() {
   return (
-    <div className="App container font-sans">
+    <Router>
       <Navbar />
-      <div className="lg:flex">
-        <div className='lg:w-1/5'>  </div>
-          <Content />
-          <Suggest />
-      </div>
-    </div>
+      <Routes>
+          <Route path='/post' element={<PostData />} />
+          <Route path='/' element={<Home />} />
+        </Routes>
+    </Router>
   );
 }
 

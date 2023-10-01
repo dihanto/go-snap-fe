@@ -5,7 +5,7 @@ const Content = () => {
     const [photos, setPhotos] = useState([]);
 
     const getDataPhoto = async () => {
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTYxMzExNjgsImlkIjoiMDIzYWVlMzYtNjZlNy00NjMwLTgzNWUtZTJmNjNlYzUwZjQ4IiwibGV2ZWwiOiJ1c2VyIiwidXNlcm5hbWUiOiJrdXJuaWF3YW4ifQ.9N_jemYoZQD2ye7cZbC_yZugp7LQq1c7BwCGiy_CBHY';
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTYyMTc5ODEsImlkIjoiMDIzYWVlMzYtNjZlNy00NjMwLTgzNWUtZTJmNjNlYzUwZjQ4IiwibGV2ZWwiOiJ1c2VyIiwidXNlcm5hbWUiOiJrdXJuaWF3YW4ifQ.WuuUWwkblrKgmoqZb2es7YP4MQ6nljCSO0bdMuYR1RQ';
         try {
             const response = await fetch(url, {
                 method: 'GET',
