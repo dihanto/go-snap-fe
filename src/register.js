@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
+let exportUsername, exportPassword;
 const Register = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [age, setAge] = useState('');
-    const [registrationSuccess, setRegistrationSuccess] = useState(false);
     const navigate = useNavigate();
+    let isSuccess
 
     const handleChange = (e) => {
         if (e.target.name === 'username') {
@@ -45,7 +45,7 @@ const Register = () => {
         .then(response => response.json())
         .then(data => {
             console.log('Register success', data);
-            setRegistrationSuccess(true);
+            isSuccess = data.success;
             navigate("/");
         })
         .catch(error => {
@@ -53,9 +53,10 @@ const Register = () => {
         });
     }
 
-    if (registrationSuccess) {
-        return null;
-      }
+    if(isSuccess === 200){
+        exportUsername = username;
+        exportPassword = password;
+    }
 
     return (
         <div className="bg-sky-300 w-2/4 mx-auto">
@@ -86,4 +87,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export { Register, exportPassword, exportUsername };

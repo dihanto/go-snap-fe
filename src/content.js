@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
+import { JWTToken } from './login';
 
 const Content = () => {
     const url = 'http://localhost:8000/photos';
     const [photos, setPhotos] = useState([]);
 
     const getDataPhoto = async () => {
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTYyMTc5ODEsImlkIjoiMDIzYWVlMzYtNjZlNy00NjMwLTgzNWUtZTJmNjNlYzUwZjQ4IiwibGV2ZWwiOiJ1c2VyIiwidXNlcm5hbWUiOiJrdXJuaWF3YW4ifQ.WuuUWwkblrKgmoqZb2es7YP4MQ6nljCSO0bdMuYR1RQ';
+        const token = JWTToken;
         try {
             const response = await fetch(url, {
                 method: 'GET',
