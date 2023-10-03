@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PostData from './post';
 import Home from './home';
-import { Register } from './register';
-import { Login } from './login';
+import { Register } from './handler';
+import { Login } from './handler';
 function App() {
   return (
     <Router>

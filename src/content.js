@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { JWTToken } from './login';
+import { JWTToken } from './handler';
 
 const Content = () => {
     const url = 'http://localhost:8000/photos';
