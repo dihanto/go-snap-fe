@@ -11,7 +11,6 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [age, setAge] = useState('');
     const navigate = useNavigate();
-    // let isSuccess;
 
     const handleChange = (e) => {
         if (e.target.name === 'username'){
@@ -44,9 +43,32 @@ const Register = () => {
         fetch(url, requestOptions)
         .then(response => response.json())
         .then(data => {
-            console.log('Register success', data);
-            // isSuccess = data.success;
-            navigate('/');
+            console.log('Register success');
+            if(data.status === 201){
+                const urlLogin = 'http://localhost:8000/users/login';
+                const loginData = {
+                    username, password
+                }
+
+                const requestOptionsLogin = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(loginData),
+                };
+
+                fetch(urlLogin, requestOptionsLogin)
+                .then(loginResponse => loginResponse.json())
+                .then(loginData => {
+                    JWTToken =  loginData.data
+                    console.log('Login success')
+                    navigate('/')
+                })
+                .catch(error => {
+                    console.log('Login failed', error);
+                });
+            }
         })
         .catch(error => {
             console.log('Register failed', error);
@@ -116,7 +138,7 @@ const Login = () => {
         fetch(url, requestOptions)
         .then(response => response.json())
         .then(data => {
-            console.log('Login success', data);
+            console.log('Login success');
             JWTToken = data.data;
             navigate("/");
         })
@@ -151,19 +173,18 @@ function Home(){
           <Navbar />
             <div className="lg:flex">
               <div className='lg:w-1/5'>  </div>
-              <Content /> 
+              <Content token={JWTToken} /> 
               <Suggest />
             </div>
           </div>
     )
 }
 
-const Content = () => {
+const Content = ({ token }) => {
     const url = 'http://localhost:8000/photos';
     const [photos, setPhotos] = useState([]);
 
     const getPhoto = async () => {
-        const token = JWTToken;
         try {
             const response = await fetch(url, {
                 method: 'GET',
@@ -186,7 +207,8 @@ const Content = () => {
 
     useEffect(() => {
         getPhoto();
-    }, [url]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[url]);
 
     return (
         <div className='lg:w-3/5'>
