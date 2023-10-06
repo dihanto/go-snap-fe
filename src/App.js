@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { PostPhoto, Register, Login, Home } from './handler';
 function App() {
   return (
-    <Router>
+    <div>
+      <Router>
       <Routes>
           <Route path='/post' element={<PostPhoto />} />
           <Route path='/' element={<Home />} />
@@ -11,6 +12,7 @@ function App() {
           <Route path='/login' element={<Login />} />
         </Routes>
     </Router>
+    </div>
   );
 }
 

@@ -76,30 +76,29 @@ const Register = () => {
     }
 
     return (
-        <div className="bg-sky-300 w-2/4 mx-auto">
-            <h1>Form Registration</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="username">Username:</label>
-                    <input type="text" name="username" value={username} onChange={handleChange} />
+        <div className="min-h-screen flex items-center justify-center">
+                <div className="bg-sky-400 w-2/5 p-8  rounded-lg shadow-lg">
+                    <div className="flex justify-center mb-4">
+                       <h1 className="text-lg font-semibold text-slate-100 text-center">Welcome to Gosnap, please sign up to see photos from your friends.</h1>
+                    </div>
+                    <form onSubmit={handleSubmit}>
+                        <div className="flex justify-center my-2 h-7">
+                            <input type="text" name="username" value={username} onChange={handleChange} placeholder="  Username" className="w-3/4 rounded-md"/>
+                        </div>
+                        <div className="flex justify-center  my-2 h-7">
+                            <input type="text" name="email" value={email} onChange={handleChange} placeholder="  Email" className="w-3/4 rounded-md" />
+                        </div>
+                        <div className="flex justify-center  my-2 h-7">
+                            <input type="password" name="password" value={password} onChange={handleChange} placeholder="  Password" className="w-3/4 rounded-md"/>
+                        </div>
+                        <div className="flex justify-center  my-2 h-7">
+                            <input type="number" name="age" value={age} onChange={handleChange} placeholder="  Age" className="w-3/4 rounded-md" />
+                        </div>
+                        <div className="mt-4 bg-slate-200 flex justify-center mx-auto w-28 rounded-lg group hover:bg-slate-600 ease-in-out duration-500">
+                            <button type="submit" className="text-lg w-full text-slate-700 group-hover:text-slate-200 ease-in-out duration-500">Sign up</button>
+                        </div>
+                    </form>
                 </div>
-                <div>
-                    <label htmlFor="email">Email:</label>
-                    <input type="text" name="email" value={email} onChange={handleChange} />
-                </div>
-                <div>
-                    <label htmlFor="password">Password:</label>
-                    <input type="text" name="password" value={password} onChange={handleChange} />
-                </div>
-                <div>
-                    <label htmlFor="age">Age:</label>
-                    <input type="text" name="age" value={age} onChange={handleChange} />
-                </div>
-                <div>
-                    <button type="submit">Register</button>
-                </div>
-            </form>
-
         </div>
     );
 };
@@ -148,28 +147,30 @@ const Login = () => {
     }
 
     return (
-        <div className="bg-yellow-300 w-2/4 mx-auto">
-            <h1>Form Login</h1>
+        <div className="min-h-screen flex items-center justify-center">
+            <div className="bg-yellow-300 w-2/4 p-8 rounded-lg shadow-lg">
+                <div className="flex justify-center mb-4">
+                    <h1 className="text-3xl font-semibold text-slate-800">Gosnap</h1>
+                </div>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="username">Username:</label>
-                    <input type="text" name="username" value={username} onChange={handleChange} />
+                <div className="flex justify-center my-3 h-9">
+                    <input type="text" name="username" value={username} onChange={handleChange} placeholder="Username" className="w-3/4 rounded-md pl-3 border-0 text-slate-800 ring-1 ring-inset ring-slate-400 focus:ring-2 focus:ring-inset focus:ring-slate-600" />
                 </div>
-                <div>
-                    <label htmlFor="password">Password:</label>
-                    <input type="password" name="password" value={password} onChange={handleChange} />
+                <div className="flex justify-center my-3 h-9">
+                    <input type="password" name="password" value={password} onChange={handleChange} placeholder="Password" className="w-3/4 rounded-md pl-3 border-0 text-slate-800 ring-1 ring-inset ring-slate-400 focus:ring-2 focus:ring-inset focus:ring-slate-600" />
                 </div>
-                <div>
-                    <button type="submit">Login</button>
+                <div className="mt-4 bg-slate-200 flex justify-center mx-auto w-24 rounded-lg group  hover:bg-slate-600 ease-in-out duration-500">
+                    <button type="submit" className="text-lg w-full text-slate-700 group-hover:text-slate-200 ease-in-out duration-500">Login</button>
                 </div>
             </form>
+        </div>
         </div>
     );
 };
 
 function Home(){
     return (
-        <div className="container font-sans">
+        <div className="font-sans">
           <Navbar />
             <div className="lg:flex">
               <div className='lg:w-1/5'>  </div>
