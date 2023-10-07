@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link} from "react-router-dom";
 import images from "./asset";
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
@@ -200,7 +200,7 @@ const Content = ({ token }) => {
             };
 
             const apiResponse = await response.json();
-            setPhotos(apiResponse.data);
+            setPhotos(apiResponse.data.reverse());
         } catch (error) {
             console.error('Error fetching data:', error);
         };
@@ -214,13 +214,13 @@ const Content = ({ token }) => {
     return (
         <div className='lg:w-3/5'>
             {photos.map((photo) => (
-                <div key={photo.id} className='bg-slate-100 pb-3 text-left text-sm'>
+                <div key={photo.id} className='bg-slate-50 pb-3 text-left text-sm'>
                     <p className='lg:py-3 lg:ml-[230px]  font-semibold'>{photo.user.username}</p>
                     <div className='lg:flex lg:items-center lg:justify-center'>
                         <img src={photo.photoUrl} alt={photo.title} className='rounded-sm'/>
                     </div>
                     <p className='mt-3 text-xs pl-4 pb-3 lg:ml-[190px]'>{photo.caption}</p>
-                    <div className='border border-solid bg-slate-500'> </div>
+                    <div className='border-b border-slate-300 w-[500px] mx-auto'> </div>
                 </div>
             ))}
         </div>
@@ -231,6 +231,7 @@ const PostPhoto = () => {
     const [title, setTitle] = useState('');
     const [caption, setCaption] = useState('');
     const [photoUrl, setPhotoUrl] = useState('');
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         if (e.target.name === 'title') {
@@ -267,6 +268,7 @@ const PostPhoto = () => {
         .then(response => response.json())
         .then(data => {
             console.log('Post photo success');
+            navigate('/');
         })
         .catch(error => {
             console.error('Post photo failed:', error);
@@ -315,7 +317,7 @@ const PostPhoto = () => {
 
 const Navbar = () => {
     return (
-        <div className="bg-slate-50  lg:w-1/5 lg:text-sm lg:fixed lg:h-screen">
+        <div className="bg-slate-50  lg:w-1/5 lg:text-sm lg:fixed lg:h-screen lg:border-r-[1px] lg:border-slate-300">
             <p className="text-left ml-10 mt-3 text-2xl"> Gosnap </p>
             <div className="ml-5 py-4 mt-3 flex">
                 <img src={images.home} alt="home" className="scale-90 mr-4" /> 
@@ -347,9 +349,43 @@ const Navbar = () => {
 
 const Suggest = () => {
     return (
-        <div className="bg-slate-50 lg:w-1/5  lg:text-sm">
-            <p className="mt-10 ml-16 mb-0">username23</p>
-            <p className="text-slate-500 ml-16">Username</p>
+        <div className="bg-slate-50 lg:w-1/5  lg:text-sm min-h-screen">
+           <div>
+                <p className="mt-10 -mb-[6px]">username</p>
+                <p className="text-slate-500">name</p>
+           </div>
+           <div>
+                <p className="font-semibold text-slate-400 my-3">Suggested for you</p>
+           </div>
+           <div>
+                <p className="my-4 -mb-[6px]">user1</p>
+                <p className="text-slate-500">name</p>
+           </div>
+           <div>
+                <p className="my-4 -mb-[6px]">user2</p>
+                <p className="text-slate-500">name</p>
+           </div>
+           <div>
+                <p className="my-4 -mb-[6px]">user3</p>
+                <p className="text-slate-500">name</p>
+           </div>
+           <div>
+                <p className="my-4 -mb-[6px]">user4</p>
+                <p className="text-slate-500">name</p>
+           </div>
+           <div>
+                <p className="my-4 -mb-[6px]">user5</p>
+                <p className="text-slate-500">name</p>
+           </div>
+           <div className="text-xs text-slate-400 mt-5">
+                <a href="#" className="mr-1">About</a>.
+                <a href="#" className="mx-1">Help</a>.
+                <a href="#" className="mx-1">Privace</a>.
+                <a href="#" className="mx-1">Terms</a>
+           </div>
+           <div className="text-xs text-slate-400 mt-6">
+                <p>© 2023 GOSNAP FROM HANS</p>
+           </div>
         </div>
     );
 };
