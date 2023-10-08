@@ -149,6 +149,10 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        if(!username || !password){
+            return
+        }
+
         const url = 'http://localhost:8000/users/login';
         const loginData = {
             username,
@@ -214,7 +218,7 @@ function Home(){
           <Navbar />
             <div className="lg:flex">
               <div className='lg:w-1/5'>  </div>
-              <Content token={JWTToken} /> 
+              <Content token={JWTToken}  /> 
               <Suggest token={JWTToken} />
             </div>
           </div>
@@ -224,6 +228,7 @@ function Home(){
 const Content = ({ token }) => {
     
     const [photos, setPhotos] = useState([]);
+    const [ likeNumbers, setLikeNumbers ] = useState({});
 
 
     const getPhoto = async () => {
@@ -242,7 +247,15 @@ const Content = ({ token }) => {
             };
 
             const apiResponse = await response.json();
-            setPhotos(apiResponse.data.reverse());
+            const reversedPhotos = apiResponse.data.reverse();
+            setPhotos(reversedPhotos);
+
+            const initialLikeNumbers = {};
+            reversedPhotos.forEach(photo => {
+                initialLikeNumbers[photo.id] = photo.likes;
+            });
+            setLikeNumbers(initialLikeNumbers);
+
         } catch (error) {
             console.error('Error fetching data:', error);
         };
@@ -253,6 +266,13 @@ const Content = ({ token }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
+    const handleLikeNumber = (photoId, likeNumber) => {
+        setLikeNumbers(prevLikeNumber => ({
+            ...prevLikeNumber,
+            [photoId]: likeNumber,
+        }));
+    };
+
     return (
         <div className='lg:w-3/5'>
             {photos.map((photo) => (
@@ -261,9 +281,9 @@ const Content = ({ token }) => {
                     <div className='lg:flex lg:items-center lg:justify-center'>
                         <img src={photo.photoUrl} alt={photo.title} className='rounded-sm'/>
                     </div> 
-                    <Like token={token} photoId={photo.id}/>
+                    <Like token={token} photoId={photo.id} onLikeNumber={(likeNumber) => handleLikeNumber(photo.id, likeNumber)}/>
                     <div>
-                        <p className="mt-3 text-xs font-semibold ml-[205px]">{photo.likes} likes</p>
+                        <p className="mt-3 text-xs font-semibold ml-[205px]"> {likeNumbers[photo.id]} likes</p>
                     </div>
                     <p className='mt-3 text-xs pl-4 pb-3 lg:ml-[190px]'><span className="font-semibold">{photo.user.usename} </span>{photo.caption}</p>
                     <div className='border-b border-slate-300 w-[500px] mx-auto'> </div>

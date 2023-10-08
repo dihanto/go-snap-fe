@@ -1,7 +1,7 @@
 import { useState } from "react";
 import images from "./asset";
 
-function Like({ token, photoId }) {
+function Like({ token, photoId, onLikeNumber }) {
   const [liked, setLiked] = useState(false);
    
   const handleLike = async () => {
@@ -16,9 +16,15 @@ function Like({ token, photoId }) {
           'Content-Type': 'application/json',
         },
       });
+      
       if (!response.ok) {
         throw new Error("failed to send like");
       }
+
+      const apiResponse = await response.json();
+      onLikeNumber(Number(apiResponse.data.likes), photoId);
+
+
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -36,9 +42,13 @@ function Like({ token, photoId }) {
           'Content-Type': 'application/json',
         },
       });
+
       if (!response.ok) {
         throw new Error('failed to unlike');
       }
+
+      const apiResponse = await response.json();
+      onLikeNumber(Number(apiResponse.data.likes), photoId)
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -58,7 +68,7 @@ function Like({ token, photoId }) {
   const likeImage = liked ? images.liked : images.like;
 
   return (
-    <div className="ml-[205px]">
+    <div className="ml-[205px] mt-3">
       <img
         src={likeImage}
         alt={liked ? 'Unlike' : 'Like'}
