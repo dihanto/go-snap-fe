@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate, Link} from "react-router-dom";
 import images from "./asset";
+import Like from "./component";
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 let JWTToken
@@ -30,6 +31,10 @@ const Register = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if(!username || !name || !email || !password || !age){
+            return
+        }
 
         const url = 'http://localhost:8000/users/register';
         const registerData = {
@@ -197,7 +202,6 @@ function Home(){
 
     useEffect(() => {
         if (JWTToken) {
-            console.log(JWTToken);
             navigate('/'); 
         } else {
             navigate('/register');
@@ -218,10 +222,12 @@ function Home(){
 }
 
 const Content = ({ token }) => {
-    const url = 'http://localhost:8000/photos';
+    
     const [photos, setPhotos] = useState([]);
 
+
     const getPhoto = async () => {
+        const url = 'http://localhost:8000/photos';
         try {
             const response = await fetch(url, {
                 method: 'GET',
@@ -245,7 +251,7 @@ const Content = ({ token }) => {
     useEffect(() => {
         getPhoto();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[url]);
+    },[]);
 
     return (
         <div className='lg:w-3/5'>
@@ -254,8 +260,12 @@ const Content = ({ token }) => {
                     <p className='lg:py-3 lg:ml-[230px]  font-semibold'>{photo.user.username}</p>
                     <div className='lg:flex lg:items-center lg:justify-center'>
                         <img src={photo.photoUrl} alt={photo.title} className='rounded-sm'/>
+                    </div> 
+                    <Like token={token} photoId={photo.id}/>
+                    <div>
+                        <p className="mt-3 text-xs font-semibold ml-[205px]">{photo.likes} likes</p>
                     </div>
-                    <p className='mt-3 text-xs pl-4 pb-3 lg:ml-[190px]'>{photo.caption}</p>
+                    <p className='mt-3 text-xs pl-4 pb-3 lg:ml-[190px]'><span className="font-semibold">{photo.user.usename} </span>{photo.caption}</p>
                     <div className='border-b border-slate-300 w-[500px] mx-auto'> </div>
                 </div>
             ))}
