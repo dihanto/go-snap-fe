@@ -7,14 +7,18 @@ let JWTToken
 
 const Register = () => {
     const [username, setUsername] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [age, setAge] = useState('');
+    const [login, setLogin] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
         if (e.target.name === 'username'){
             setUsername(e.target.value);
+        } else if (e.target.name === 'name'){
+            setName(e.target.value);
         } else if (e.target.name === 'email'){
             setEmail(e.target.value);
         } else if (e.target.name === 'password'){
@@ -29,7 +33,7 @@ const Register = () => {
 
         const url = 'http://localhost:8000/users/register';
         const registerData = {
-            username, email, password, age: parseInt(age, 10),
+            username, name, email, password, age: parseInt(age, 10),
         };
 
         const requestOptions = {
@@ -75,6 +79,16 @@ const Register = () => {
         });
     }
 
+    const handleLogin = (e) => {
+        e.preventDefault();
+
+        setLogin(true)
+        
+        if (login){
+            navigate('/login');
+        }
+    }
+
     return (
         <div className="min-h-screen flex items-center justify-center">
                 <div className="bg-sky-400 w-2/5 p-8  rounded-lg shadow-lg">
@@ -83,21 +97,31 @@ const Register = () => {
                     </div>
                     <form onSubmit={handleSubmit}>
                         <div className="flex justify-center my-2 h-7">
-                            <input type="text" name="username" value={username} onChange={handleChange} placeholder="  Username" className="w-3/4 rounded-md"/>
+                            <input type="text" name="username" value={username} onChange={handleChange} placeholder="Username" className="w-3/4 rounded-md pl-3"/>
+                        </div>
+                        <div className="flex justify-center my-2 h-7">
+                            <input type="text" name="name" value={name} onChange={handleChange} placeholder="Name" className="w-3/4 rounded-md pl-3"/>
                         </div>
                         <div className="flex justify-center  my-2 h-7">
-                            <input type="text" name="email" value={email} onChange={handleChange} placeholder="  Email" className="w-3/4 rounded-md" />
+                            <input type="text" name="email" value={email} onChange={handleChange} placeholder="Email" className="w-3/4 rounded-md pl-3" />
                         </div>
                         <div className="flex justify-center  my-2 h-7">
-                            <input type="password" name="password" value={password} onChange={handleChange} placeholder="  Password" className="w-3/4 rounded-md"/>
+                            <input type="password" name="password" value={password} onChange={handleChange} placeholder="Password" className="w-3/4 rounded-md pl-3"/>
                         </div>
                         <div className="flex justify-center  my-2 h-7">
-                            <input type="number" name="age" value={age} onChange={handleChange} placeholder="  Age" className="w-3/4 rounded-md" />
+                            <input type="number" name="age" value={age} onChange={handleChange} placeholder="Age" className="w-3/4 rounded-md pl-3" />
                         </div>
                         <div className="mt-4 bg-slate-200 flex justify-center mx-auto w-28 rounded-lg group hover:bg-slate-600 ease-in-out duration-500">
                             <button type="submit" className="text-lg w-full text-slate-700 group-hover:text-slate-200 ease-in-out duration-500">Sign up</button>
                         </div>
                     </form>
+                    <form onSubmit={handleLogin}>
+                        <div className=" flex flex-col justify-center mt-3">
+                            <p className="mb-2 text-base text-slate-800 mx-auto">Already have an account?</p>
+                            <button type="submit" className="bg-slate-200 rounded-lg mx-auto text-slate-700 text-lg w-28 hover:bg-slate-600 hover:text-slate-200 ease-in-out duration-500">Login</button>
+                        </div>
+                    </form>
+
                 </div>
         </div>
     );
@@ -169,13 +193,25 @@ const Login = () => {
 };
 
 function Home(){
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (JWTToken) {
+            console.log(JWTToken);
+            navigate('/'); 
+        } else {
+            navigate('/register');
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [JWTToken]);
+
     return (
         <div className="font-sans">
           <Navbar />
             <div className="lg:flex">
               <div className='lg:w-1/5'>  </div>
               <Content token={JWTToken} /> 
-              <Suggest />
+              <Suggest token={JWTToken} />
             </div>
           </div>
     )
@@ -347,12 +383,42 @@ const Navbar = () => {
     );
 };
 
-const Suggest = () => {
+const Suggest = ({ token }) => {
+    const url = 'http://localhost:8000/users'
+    const [username, setUsername] = useState('');
+    const [name, setName] = useState('');
+
+    const getUser = async () => {
+        try{
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok){
+                throw new Error('Response was not ok');
+            };
+
+            const apiResponse = await response.json();
+            setUsername(apiResponse.data.username);
+            setName(apiResponse.data.name);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        };
+    };
+
+    useEffect(() => {
+        getUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[token]);
+
     return (
         <div className="bg-slate-50 lg:w-1/5  lg:text-sm min-h-screen">
            <div>
-                <p className="mt-10 -mb-[6px]">username</p>
-                <p className="text-slate-500">name</p>
+                <p className="mt-10 -mb-[6px] font-semibold">{ username }</p>
+                <p className="text-slate-500">{ name }</p>
            </div>
            <div>
                 <p className="font-semibold text-slate-400 my-3">Suggested for you</p>
