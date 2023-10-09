@@ -216,8 +216,8 @@ function Home(){
     return (
         <div className="font-sans">
           <Navbar />
-            <div className="lg:flex">
-              <div className='lg:w-1/5'>  </div>
+            <div className=" flex">
+              <div className=' w-1/5'>  </div>
               <Content token={JWTToken}  /> 
               <Suggest token={JWTToken} />
             </div>
@@ -274,18 +274,20 @@ const Content = ({ token }) => {
     };
 
     return (
-        <div className='lg:w-3/5'>
+        <div className=' w-[1000px]'>
             {photos.map((photo) => (
                 <div key={photo.id} className='bg-slate-50 pb-3 text-left text-sm'>
-                    <p className='lg:py-3 lg:ml-[230px]  font-semibold'>{photo.user.username}</p>
-                    <div className='lg:flex lg:items-center lg:justify-center'>
+                    <p className=' py-3  ml-[230px]  font-semibold'>{photo.user.username}</p>
+                    <div className=' flex  items-center  justify-center'>
                         <img src={photo.photoUrl} alt={photo.title} className='rounded-sm'/>
                     </div> 
-                    <Like token={token} photoId={photo.id} onLikeNumber={(likeNumber) => handleLikeNumber(photo.id, likeNumber)}/>
-                    <div>
-                        <p className="mt-3 text-xs font-semibold ml-[205px]"> {likeNumbers[photo.id]} likes</p>
+                    <div className="w-[500px] mx-auto">
+                        <Like token={token} photoId={photo.id} onLikeNumber={(likeNumber) => handleLikeNumber(photo.id, likeNumber)}/>
+                        <div>
+                            <p className="mt-3 text-xs font-semibold"> {likeNumbers[photo.id]} likes</p>
+                        </div>
+                        <p className='mt-3 text-xs pb-3'><span className="font-semibold">{photo.user.usename} </span>{photo.caption}</p>
                     </div>
-                    <p className='mt-3 text-xs pl-4 pb-3 lg:ml-[190px]'><span className="font-semibold">{photo.user.usename} </span>{photo.caption}</p>
                     <div className='border-b border-slate-300 w-[500px] mx-auto'> </div>
                 </div>
             ))}
@@ -383,7 +385,7 @@ const PostPhoto = () => {
 
 const Navbar = () => {
     return (
-        <div className="bg-slate-50  lg:w-1/5 lg:text-sm lg:fixed lg:h-screen lg:border-r-[1px] lg:border-slate-300">
+        <div className="bg-slate-50   w-1/5  text-sm  fixed  h-screen  border-r-[1px]  border-slate-300">
             <p className="text-left ml-10 mt-3 text-2xl"> Gosnap </p>
             <div className="ml-5 py-4 mt-3 flex">
                 <img src={images.home} alt="home" className="scale-90 mr-4" /> 
@@ -445,7 +447,7 @@ const Suggest = ({ token }) => {
     },[token]);
 
     return (
-        <div className="bg-slate-50 lg:w-1/5  lg:text-sm min-h-screen">
+        <div className="bg-slate-50  w-1/5   text-sm min-h-screen">
            <div>
                 <p className="mt-10 -mb-[6px] font-semibold">{ username }</p>
                 <p className="text-slate-500">{ name }</p>

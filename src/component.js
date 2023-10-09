@@ -22,6 +22,7 @@ function Like({ token, photoId, onLikeNumber }) {
       }
 
       const apiResponse = await response.json();
+      console.log(apiResponse);
       onLikeNumber(Number(apiResponse.data.likes), photoId);
 
 
@@ -68,7 +69,7 @@ function Like({ token, photoId, onLikeNumber }) {
   const likeImage = liked ? images.liked : images.like;
 
   return (
-    <div className="ml-[205px] mt-3">
+    <div className="mt-3">
       <img
         src={likeImage}
         alt={liked ? 'Unlike' : 'Like'}
