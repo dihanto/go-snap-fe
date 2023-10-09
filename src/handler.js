@@ -261,10 +261,34 @@ const Content = ({ token }) => {
         };
     };
 
+    const handleIsLiked = async (photoId) => {
+        const url = `http://localhost:8000/photos/${photoId}/like`;
+    
+        try {
+          const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+    
+          if (!response.ok){
+            throw new Error('failed to get like detail');
+          }
+    
+         const apiResponse = await response.json();
+         return apiResponse.data;
+        } catch(error){
+          console.error('failed to fetch data:', error);
+          throw error;
+        }
+      }
+
     useEffect(() => {
         getPhoto();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[]);
+    },[token]);
 
     const handleLikeNumber = (photoId, likeNumber) => {
         setLikeNumbers(prevLikeNumber => ({
@@ -272,6 +296,7 @@ const Content = ({ token }) => {
             [photoId]: likeNumber,
         }));
     };
+
 
     return (
         <div className=' w-[1000px]'>
@@ -282,11 +307,18 @@ const Content = ({ token }) => {
                         <img src={photo.photoUrl} alt={photo.title} className='rounded-sm'/>
                     </div> 
                     <div className="w-[500px] mx-auto">
-                        <Like token={token} photoId={photo.id} onLikeNumber={(likeNumber) => handleLikeNumber(photo.id, likeNumber)}/>
+                        <Like
+                            token={token}
+                            photoId={photo.id}
+                            onLikeNumber={(likeNumber) => {
+                                handleLikeNumber(photo.id, likeNumber);
+                            }}
+                            isLiked={handleIsLiked}
+                        />
                         <div>
                             <p className="mt-3 text-xs font-semibold"> {likeNumbers[photo.id]} likes</p>
                         </div>
-                        <p className='mt-3 text-xs pb-3'><span className="font-semibold">{photo.user.usename} </span>{photo.caption}</p>
+                        <p className='mt-3 text-xs pb-3'><span className="font-semibold">{photo.user.username} </span>{photo.caption}</p>
                     </div>
                     <div className='border-b border-slate-300 w-[500px] mx-auto'> </div>
                 </div>

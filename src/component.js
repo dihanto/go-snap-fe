@@ -1,8 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import images from "./asset";
 
-function Like({ token, photoId, onLikeNumber }) {
-  const [liked, setLiked] = useState(false);
+function Like({ token, photoId, onLikeNumber, isLiked }) {
+  const [like, setLike] = useState(false);
+
+  const [initialStatusFetched, setInitialStatusFetched] = useState(false);
+
+  useEffect(() => {
+    if (!initialStatusFetched) {
+      isLiked(photoId)
+        .then((initialLikeStatus) => {
+          setLike(initialLikeStatus);
+          setInitialStatusFetched(true);
+        })
+        .catch((error) => {
+          console.error("Error fetching initial like status:", error);
+        });
+    }
+  }, [photoId, initialStatusFetched, isLiked]);
    
   const handleLike = async () => {
 
@@ -22,7 +37,6 @@ function Like({ token, photoId, onLikeNumber }) {
       }
 
       const apiResponse = await response.json();
-      console.log(apiResponse);
       onLikeNumber(Number(apiResponse.data.likes), photoId);
 
 
@@ -56,26 +70,27 @@ function Like({ token, photoId, onLikeNumber }) {
   };
 
   const handleClick = () => {
-    if (!liked) {
+    if (!like) {
       handleLike();
     } else {
       handleUnlike();
     }
 
-    setLiked(!liked);
+    setLike(!like);
     
   };
 
-  const likeImage = liked ? images.liked : images.like;
+
+  const likeImage = like ? images.liked : images.like;
 
   return (
     <div className="mt-3">
       <img
         src={likeImage}
-        alt={liked ? 'Unlike' : 'Like'}
+        alt={like ? 'Unlike' : 'Like'}
         onClick={handleClick}
         className={`${
-          liked ? 'scale-100' : 'scale-110'
+          like ? 'scale-100' : 'scale-110'
         } transition-transform duration-300 cursor-pointer`}
       />
     </div>
