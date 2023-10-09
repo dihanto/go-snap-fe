@@ -22,51 +22,41 @@ function Like({ token, photoId, onLikeNumber, isLiked }) {
   const handleLike = async () => {
 
     const url = `http://localhost:8000/photos/${photoId}/like`;
-
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      if (!response.ok) {
-        throw new Error("failed to send like");
-      }
-
-      const apiResponse = await response.json();
-      onLikeNumber(Number(apiResponse.data.likes), photoId);
-
-
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    };
+    
+      const response = await fetch(url, requestOptions);
+      const responseJson = await response.json();
+      if (responseJson.status === 200){
+        onLikeNumber(Number(responseJson.data.likes), photoId);
+      } else {
+        console.log('failed to send like : ', responseJson.message);
+      };
   };
 
   const handleUnlike = async () => {
 
     const url = `http://localhost:8000/photos/${photoId}/unlike`;
-
-    try {
-      const response = await fetch(url, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('failed to unlike');
-      }
-
-      const apiResponse = await response.json();
-      onLikeNumber(Number(apiResponse.data.likes), photoId)
-    } catch (error) {
-      console.error('Error fetching data:', error);
+    const requestOptions = {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
     }
+    
+      const response = await fetch(url, requestOptions);
+      const responseJson = await response.json();
+      if (responseJson.status === 200){
+        onLikeNumber(Number(responseJson.data.likes), photoId)
+      } else {
+        console.log('failed to unlike :', responseJson.message);
+      };
   };
 
   const handleClick = () => {

@@ -29,7 +29,7 @@ const Register = () => {
         }
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if(!username || !name || !email || !password || !age){
@@ -40,7 +40,6 @@ const Register = () => {
         const registerData = {
             username, name, email, password, age: parseInt(age, 10),
         };
-
         const requestOptions = {
             method: 'POST',
             headers: {
@@ -49,16 +48,14 @@ const Register = () => {
             body: JSON.stringify(registerData),
         };
 
-        fetch(url, requestOptions)
-        .then(response => response.json())
-        .then(data => {
-            console.log('Register success');
-            if(data.status === 201){
+        const response = await fetch(url, requestOptions);
+        const responseJson = await response.json();
+
+        if (responseJson.status === 201){
                 const urlLogin = 'http://localhost:8000/users/login';
                 const loginData = {
                     username, password
                 }
-
                 const requestOptionsLogin = {
                     method: 'POST',
                     headers: {
@@ -67,22 +64,19 @@ const Register = () => {
                     body: JSON.stringify(loginData),
                 };
 
-                fetch(urlLogin, requestOptionsLogin)
-                .then(loginResponse => loginResponse.json())
-                .then(loginData => {
-                    JWTToken =  loginData.data
-                    console.log('Login success')
-                    navigate('/')
-                })
-                .catch(error => {
-                    console.log('Login failed', error);
-                });
-            }
-        })
-        .catch(error => {
-            console.log('Register failed', error);
-        });
-    }
+               const responseLogin = await fetch(urlLogin, requestOptionsLogin);
+               const responseLoginJson = await responseLogin.json();
+               if (responseLoginJson.status === 200){
+                JWTToken = responseLoginJson.data;
+                navigate('/');
+               } else {
+                console.log(responseLogin.data);
+               }
+
+        } else {
+            console.log(responseJson.message);
+        };
+    };
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -91,8 +85,8 @@ const Register = () => {
         
         if (login){
             navigate('/login');
-        }
-    }
+        };
+    };
 
     return (
         <div className="min-h-screen flex items-center justify-center">
@@ -146,7 +140,7 @@ const Login = () => {
     };
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if(!username || !password){
@@ -167,16 +161,15 @@ const Login = () => {
             body: JSON.stringify(loginData),
         };
 
-        fetch(url, requestOptions)
-        .then(response => response.json())
-        .then(data => {
-            console.log('Login success');
-            JWTToken = data.data;
-            navigate("/");
-        })
-        .catch(error => {
-            console.log('Login failed', error);
-        });
+        const response = await fetch(url, requestOptions);
+        const responseJson = await response.json();
+        if (responseJson.status === 200){
+            JWTToken = responseJson.data;
+            navigate('/')
+        } else {
+            console.log('Login failed :', responseJson.message)
+        }
+
     }
 
     return (
@@ -230,24 +223,24 @@ const Content = ({ token }) => {
     const [photos, setPhotos] = useState([]);
     const [ likeNumbers, setLikeNumbers ] = useState({});
 
+    
+
 
     const getPhoto = async () => {
         const url = 'http://localhost:8000/photos';
-        try {
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
+        const requestOptions = {
+            method: 'GET',
+            headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
-                },
-            });
+            },
+        }
+        
+        const response = await fetch(url, requestOptions);
+        const responseJson = await response.json();
+        if (responseJson.status === 200){
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            };
-
-            const apiResponse = await response.json();
-            const reversedPhotos = apiResponse.data.reverse();
+            const reversedPhotos = responseJson.data.reverse();
             setPhotos(reversedPhotos);
 
             const initialLikeNumbers = {};
@@ -256,36 +249,33 @@ const Content = ({ token }) => {
             });
             setLikeNumbers(initialLikeNumbers);
 
-        } catch (error) {
-            console.error('Error fetching data:', error);
+        } else {
+            console.log('failed to get Photo :', responseJson.message);
         };
     };
 
     const handleIsLiked = async (photoId) => {
         const url = `http://localhost:8000/photos/${photoId}/like`;
-    
-        try {
-          const response = await fetch(url, {
+        const requestOptions = {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json',
             },
-          });
-    
-          if (!response.ok){
-            throw new Error('failed to get like detail');
-          }
-    
-         const apiResponse = await response.json();
-         return apiResponse.data;
-        } catch(error){
-          console.error('failed to fetch data:', error);
-          throw error;
+        }
+        const response = await fetch(url, requestOptions);
+        const responseJson = await response.json();
+        if (responseJson.status === 200){
+            return responseJson.data;
+        } else {
+            console.log('failed to get like data : ', responseJson.message)
         }
       }
 
     useEffect(() => {
+        if (!token){
+            return ;
+        }
         getPhoto();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[token]);
@@ -343,36 +333,32 @@ const PostPhoto = () => {
         };
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const url = 'http://localhost:8000/photos';
-        const postPhoto = {
+        const photoData = {
             title,
             caption,
             photoUrl,
         };
-
         const token = JWTToken;
-
         const requestOptions = {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(postPhoto),
+            body: JSON.stringify(photoData),
         };
 
-        fetch(url, requestOptions)
-        .then(response => response.json())
-        .then(data => {
-            console.log('Post photo success');
+        const response = await fetch(url, requestOptions);
+        const responseJson = await response.json();
+        if (responseJson.status === 201){
             navigate('/');
-        })
-        .catch(error => {
-            console.error('Post photo failed:', error);
-        });
+        } else {
+            console.log('failed to post photo :', responseJson.message);
+        };
     };
 
     return (
@@ -448,32 +434,33 @@ const Navbar = () => {
 };
 
 const Suggest = ({ token }) => {
-    const url = 'http://localhost:8000/users'
     const [username, setUsername] = useState('');
     const [name, setName] = useState('');
 
     const getUser = async () => {
-        try{
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (!response.ok){
-                throw new Error('Response was not ok');
-            };
+    const url = 'http://localhost:8000/users'
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    }
 
-            const apiResponse = await response.json();
-            setUsername(apiResponse.data.username);
-            setName(apiResponse.data.name);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        };
+            const response = await fetch(url, requestOptions);
+            const responseJson = await response.json();
+            if(responseJson.status === 200){
+                setUsername(responseJson.data.username);
+                setName(responseJson.data.name);
+            } else {
+                console.log('failed to get user data : ', responseJson.message);
+            };
     };
 
     useEffect(() => {
+        if(!token){
+            return ;
+        }
         getUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[token]);
