@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import images from "./asset";
+import images from "./assets";
 
 function Like({ token, photoId, onLikeNumber, isLiked }) {
   const [like, setLike] = useState(false);

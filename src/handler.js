@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate, Link} from "react-router-dom";
-import images from "./asset";
+import images from "./assets";
 import Like from "./component";
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
