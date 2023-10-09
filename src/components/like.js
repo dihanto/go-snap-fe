@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import images from "./assets";
+import images from "./asset"
 
-function Like({ token, photoId, onLikeNumber, isLiked }) {
+export default function Like({ token, photoId, onLikeNumber, isLiked }) {
   const [like, setLike] = useState(false);
-
   const [initialStatusFetched, setInitialStatusFetched] = useState(false);
 
   useEffect(() => {
@@ -16,7 +15,7 @@ function Like({ token, photoId, onLikeNumber, isLiked }) {
         .catch((error) => {
           console.error("Error fetching initial like status:", error);
         });
-    }
+    };
   }, [photoId, initialStatusFetched, isLiked]);
    
   const handleLike = async () => {
@@ -48,7 +47,7 @@ function Like({ token, photoId, onLikeNumber, isLiked }) {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-    }
+    };
     
       const response = await fetch(url, requestOptions);
       const responseJson = await response.json();
@@ -64,7 +63,7 @@ function Like({ token, photoId, onLikeNumber, isLiked }) {
       handleLike();
     } else {
       handleUnlike();
-    }
+    };
 
     setLike(!like);
     
@@ -85,6 +84,5 @@ function Like({ token, photoId, onLikeNumber, isLiked }) {
       />
     </div>
   );
-}
+};
 
-export default Like;
