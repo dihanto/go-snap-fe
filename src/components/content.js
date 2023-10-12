@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import  Like  from "./like"
+import Comment from "./comment";
 
 export default function Content ({ token }) {
     
@@ -16,18 +17,19 @@ export default function Content ({ token }) {
             },
         };
 
-        console.log(requestOptions)
-        
         const response = await fetch(url, requestOptions);
         const responseJson = await response.json();
         if (responseJson.status === 200){
-
+            if(!responseJson.data){
+                return
+            }
+            
             const reversedPhotos = responseJson.data.reverse();
             setPhotos(reversedPhotos);
 
             const initialLikeNumbers = {};
             reversedPhotos.forEach(photo => {
-                initialLikeNumbers[photo.id] = photo.likes;
+                initialLikeNumbers[photo.id] = photo.like.likeCount;
             });
             setLikeNumbers(initialLikeNumbers);
 
@@ -36,8 +38,20 @@ export default function Content ({ token }) {
         };
     };
 
+    // const handleComment = async () => {
+    //     const url = `http://localhost:8000/comments`
+    //     const requestOptions = {
+    //         method: 'POST',
+    //         headers: {
+    //             'Authorization': `Bearer ${token}`,
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: 
+    //     }
+    // }
+
     const handleIsLiked = async (photoId) => {
-        const url = `http://localhost:8000/photos/${photoId}/like`;
+        const url = `http://localhost:8000/photos/${photoId}/likes`;
         const requestOptions = {
             method: 'GET',
             headers: {
@@ -81,14 +95,17 @@ export default function Content ({ token }) {
                         <img src={photo.photoUrl} alt={photo.title} className='rounded-sm'/>
                     </div> 
                     <div className="w-[500px] mx-auto">
-                        <Like
-                            token={token}
-                            photoId={photo.id}
-                            onLikeNumber={(likeNumber) => {
-                                handleLikeNumber(photo.id, likeNumber);
-                            }}
-                            isLiked={handleIsLiked}
-                        />
+                        <div className="flex">
+                            <Like
+                                token={token}
+                                photoId={photo.id}
+                                onLikeNumber={(likeNumber) => {
+                                    handleLikeNumber(photo.id, likeNumber);
+                                }}
+                                isLiked={handleIsLiked}
+                            />
+                            <Comment />
+                        </div>
                         <div>
                             <p className="mt-3 text-xs font-semibold"> {likeNumbers[photo.id]} likes</p>
                         </div>

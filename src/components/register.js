@@ -10,6 +10,8 @@ export default function Register ( {onJwtToken} )  {
     const [age, setAge] = useState('');
     const [login, setLogin] = useState(false);
     const navigate = useNavigate();
+    // onJwtToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTcxNjE3NzksImlkIjoiY2M3NjRlYjctMTA2NC00NjEyLTk5ZTUtNzBmZjJiZjI4MWZlIiwibGV2ZWwiOiJ1c2VyIiwidXNlcm5hbWUiOiJqb2hubGVub24ifQ.C2JgEHDlLYBuUfR5q8tXjKlhK1d39V9kYs--I-pehJw')
+    // navigate('/');
 
     const handleChange = (e) => {
         if (e.target.name === 'username'){

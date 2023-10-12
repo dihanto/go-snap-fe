@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import  PostPhoto  from "./components/post";
-import  Home from "./components/home";
-import  Register from "./components/register";
-import  Login  from "./components/login";
+import  PostPhoto  from "./post";
+import  Home from "./home";
+import  Register from "./register";
+import  Login  from "./login";
 import { useState } from 'react';
 function App() {
 
@@ -11,6 +11,7 @@ function App() {
   const handleJwtToken = (token) => {
       setJwtToken(token)
   }
+
 
   return (
     <div>

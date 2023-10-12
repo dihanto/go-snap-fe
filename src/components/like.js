@@ -20,7 +20,7 @@ export default function Like({ token, photoId, onLikeNumber, isLiked }) {
    
   const handleLike = async () => {
 
-    const url = `http://localhost:8000/photos/${photoId}/like`;
+    const url = `http://localhost:8000/photos/${photoId}/likes`;
     const requestOptions = {
       method: 'POST',
       headers: {
@@ -32,7 +32,7 @@ export default function Like({ token, photoId, onLikeNumber, isLiked }) {
       const response = await fetch(url, requestOptions);
       const responseJson = await response.json();
       if (responseJson.status === 200){
-        onLikeNumber(Number(responseJson.data.likes), photoId);
+        onLikeNumber(Number(responseJson.data.likeCount), photoId);
       } else {
         console.log('failed to send like : ', responseJson.message);
       };
@@ -40,7 +40,7 @@ export default function Like({ token, photoId, onLikeNumber, isLiked }) {
 
   const handleUnlike = async () => {
 
-    const url = `http://localhost:8000/photos/${photoId}/unlike`;
+    const url = `http://localhost:8000/photos/${photoId}/unlikes`;
     const requestOptions = {
       method: 'DELETE',
       headers: {
@@ -52,7 +52,7 @@ export default function Like({ token, photoId, onLikeNumber, isLiked }) {
       const response = await fetch(url, requestOptions);
       const responseJson = await response.json();
       if (responseJson.status === 200){
-        onLikeNumber(Number(responseJson.data.likes), photoId)
+        onLikeNumber(Number(responseJson.data.likeCount), photoId)
       } else {
         console.log('failed to unlike :', responseJson.message);
       };
@@ -79,8 +79,10 @@ export default function Like({ token, photoId, onLikeNumber, isLiked }) {
         alt={like ? 'Unlike' : 'Like'}
         onClick={handleClick}
         className={`${
-          like ? 'scale-100' : 'scale-110'
-        } transition-transform duration-300 cursor-pointer`}
+          like ? 'scale-90' : 'scale-[.85]'
+        } transition-transform duration-300 cursor-pointer ${
+          like ? 'hover:opacity-100' : 'hover:opacity-70'
+        }`}
       />
     </div>
   );
