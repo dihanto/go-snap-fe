@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import  Like  from "./like"
-import Comment from "./comment";
+import  { HandleCommentIcon, HandleGetComment, HandleWriteComment } from "./comment";
 
 export default function Content ({ token }) {
     
     const [photos, setPhotos] = useState([]);
     const [ likeNumbers, setLikeNumbers ] = useState({});
+    const [commentState, setCommentState ] = useState(false);
 
     const getPhoto = async () => {
         const url = 'http://localhost:8000/photos';
@@ -27,6 +28,7 @@ export default function Content ({ token }) {
             const reversedPhotos = responseJson.data.reverse();
             setPhotos(reversedPhotos);
 
+            
             const initialLikeNumbers = {};
             reversedPhotos.forEach(photo => {
                 initialLikeNumbers[photo.id] = photo.like.likeCount;
@@ -37,18 +39,6 @@ export default function Content ({ token }) {
             console.log('failed to get Photo :', responseJson.message);
         };
     };
-
-    // const handleComment = async () => {
-    //     const url = `http://localhost:8000/comments`
-    //     const requestOptions = {
-    //         method: 'POST',
-    //         headers: {
-    //             'Authorization': `Bearer ${token}`,
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: 
-    //     }
-    // }
 
     const handleIsLiked = async (photoId) => {
         const url = `http://localhost:8000/photos/${photoId}/likes`;
@@ -74,7 +64,7 @@ export default function Content ({ token }) {
         }
         getPhoto();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[token]);
+    },[token, commentState]);
 
     const handleLikeNumber = (photoId, likeNumber) => {
         setLikeNumbers(prevLikeNumber => ({
@@ -83,6 +73,9 @@ export default function Content ({ token }) {
         }));
     };
 
+    const handleCommentState = () => {
+        setCommentState(!commentState);
+    }
 
     return (
         <div className=' w-[1000px]'>
@@ -104,12 +97,14 @@ export default function Content ({ token }) {
                                 }}
                                 isLiked={handleIsLiked}
                             />
-                            <Comment />
+                            <HandleCommentIcon />
                         </div>
                         <div>
                             <p className="mt-3 text-xs font-semibold"> {likeNumbers[photo.id]} likes</p>
                         </div>
-                        <p className='mt-3 text-xs pb-3'><span className="font-semibold">{photo.user.username} </span>{photo.caption}</p>
+                        <p className='mt-3 text-xs pb-1 font-normal'><span className="font-semibold">{photo.user.username} </span>{photo.caption}</p>
+                        <HandleGetComment token={token} photoId={photo.id} commentState={commentState}/>
+                        <HandleWriteComment token={token} photoId={photo.id} onCommentState={handleCommentState}/>
                     </div>
                     <div className='border-b border-slate-300 w-[500px] mx-auto'> </div>
                 </div>
@@ -117,3 +112,5 @@ export default function Content ({ token }) {
         </div>
     );
 };
+
+
