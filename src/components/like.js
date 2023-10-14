@@ -71,7 +71,7 @@ export default function Like({ token, photoId, onLikeNumber, isLiked }) {
 
 
   const likeImage = like ? images.liked : images.like;
-
+ 
   return (
     <div className="mt-3">
       <img

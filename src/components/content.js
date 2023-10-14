@@ -24,13 +24,25 @@ export default function Content ({ token }) {
             if(!responseJson.data){
                 return
             }
-            
-            const reversedPhotos = responseJson.data.reverse();
-            setPhotos(reversedPhotos);
+            const getRandomUsersFromArray = (arr, numItems) => {
+                if (numItems >= arr.length) {
+                  return arr; 
+                }
+              
+                const shuffledArray = arr.slice();
+                for (let i = shuffledArray.length - 1; i > 0; i--) {
+                  const j = Math.floor(Math.random() * (i + 1)); 
+                  [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; 
+                }
+              
+                return shuffledArray.slice(0, numItems);
+              }
+            const randomPhotos = getRandomUsersFromArray(responseJson.data, 3)
+            setPhotos(randomPhotos);
 
             
             const initialLikeNumbers = {};
-            reversedPhotos.forEach(photo => {
+            randomPhotos.forEach(photo => {
                 initialLikeNumbers[photo.id] = photo.like.likeCount;
             });
             setLikeNumbers(initialLikeNumbers);
@@ -52,6 +64,7 @@ export default function Content ({ token }) {
         const response = await fetch(url, requestOptions);
         const responseJson = await response.json();
         if (responseJson.status === 200){
+            console.log(responseJson.data)
             return responseJson.data;
         } else {
             console.log('failed to get like data : ', responseJson.message)

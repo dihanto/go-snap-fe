@@ -4,7 +4,7 @@ import images from "./asset";
 
 export default function Navbar() {
     return (
-        <div className="bg-slate-50   w-1/5  text-sm  fixed  h-screen  border-r-[1px]  border-slate-300">
+        <div className="bg-slate-50   w-1/5 max-w-[250px] text-sm  fixed  h-screen  border-r-[1px]  border-slate-300">
             <p className="text-left ml-10 mt-3 text-2xl"> Gosnap </p>
             <div className="ml-5 py-4 mt-3 flex">
                 <img src={images.home} alt="home" className="scale-90 mr-4" /> 
