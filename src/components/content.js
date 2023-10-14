@@ -84,8 +84,8 @@ export default function Content ({ token }) {
                     <div className="w-[500px] mx-auto">
                         <p className=' py-3 font-semibold'>{photo.user.username}</p>
                     </div>
-                    <div className=' flex  items-center  justify-center'>
-                        <img src={photo.photoUrl} alt={photo.title} className='rounded-sm'/>
+                    <div className=' flex  items-center  justify-center w-[500px] h-[500px] bg-black mx-auto'>
+                        <img src={photo.photoUrl} alt={photo.title} className='rounded-sm max-w-full max-h-full'/>
                     </div> 
                     <div className="w-[500px] mx-auto">
                         <div className="flex">

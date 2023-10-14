@@ -41,7 +41,7 @@ function HandleWriteComment({ token, photoId, onCommentState }) {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleSubmitComment();
-    }
+    };
   };
 
   return (
