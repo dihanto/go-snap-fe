@@ -91,36 +91,41 @@ export default function Content ({ token }) {
 
     return (
         <div className=' w-[1000px]'>
-            {photos.map((photo) => (
-                <div key={photo.id} className='bg-slate-50 pb-3 text-left text-sm'>
-                    <div className="w-[500px] mx-auto">
-                        <p className=' py-3 font-semibold'>{photo.user.username}</p>
-                    </div>
-                    <div className=' flex  items-center  justify-center w-[500px] h-[500px] bg-black mx-auto'>
-                        <img src={photo.photoUrl} alt={photo.title} className='rounded-sm max-w-full max-h-full'/>
-                    </div> 
-                    <div className="w-[500px] mx-auto">
-                        <div className="flex">
-                            <Like
-                                token={token}
-                                photoId={photo.id}
-                                onLikeNumber={(likeNumber) => {
-                                    handleLikeNumber(photo.id, likeNumber);
-                                }}
-                                isLiked={handleIsLiked}
-                            />
-                            <HandleCommentIcon />
+            { !photos ? (
+                photos.map((photo) => (
+                    <div key={photo.id} className='bg-slate-50 pb-3 text-left text-sm'>
+                        <div className="w-[500px] mx-auto">
+                            <p className=' py-3 font-semibold'>{photo.user.username}</p>
                         </div>
-                        <div>
-                            <p className="mt-3 text-xs font-semibold"> {likeNumbers[photo.id]} likes</p>
+                        <div className=' flex  items-center  justify-center w-[500px] h-[500px] bg-black mx-auto'>
+                            <img src={photo.photoUrl} alt={photo.title} className='rounded-sm max-w-full max-h-full'/>
+                        </div> 
+                        <div className="w-[500px] mx-auto">
+                            <div className="flex">
+                                <Like
+                                    token={token}
+                                    photoId={photo.id}
+                                    onLikeNumber={(likeNumber) => {
+                                        handleLikeNumber(photo.id, likeNumber);
+                                    }}
+                                    isLiked={handleIsLiked}
+                                />
+                                <HandleCommentIcon />
+                            </div>
+                            <div>
+                                <p className="mt-3 text-xs font-semibold"> {likeNumbers[photo.id]} likes</p>
+                            </div>
+                            <p className='mt-3 text-xs pb-1 font-normal'><span className="font-semibold">{photo.user.username} </span>{photo.caption}</p>
+                            <HandleGetComment token={token} photoId={photo.id} commentToggle={commentToggle}/>
+                            <HandleWriteComment token={token} photoId={photo.id} onCommentToggle={handleCommentToggle}/>
                         </div>
-                        <p className='mt-3 text-xs pb-1 font-normal'><span className="font-semibold">{photo.user.username} </span>{photo.caption}</p>
-                        <HandleGetComment token={token} photoId={photo.id} commentToggle={commentToggle}/>
-                        <HandleWriteComment token={token} photoId={photo.id} onCommentToggle={handleCommentToggle}/>
+                        <div className='border-b border-slate-300 w-[500px] mx-auto'> </div>
                     </div>
-                    <div className='border-b border-slate-300 w-[500px] mx-auto'> </div>
-                </div>
-            ))}
+                ))
+            ) : (
+                    <p className="my-auto"> No images to Display</p>
+            )
+            }
         </div>
     );
 };

@@ -59,7 +59,7 @@ export default function Suggest ({ token })  {
      setFollowings(responseJson.data);
 };
      const handleFilterUsers = async () => {
-          if(!followings){
+          if(!followings || !usersNotFiltered){
                setUsers(usersNotFiltered);
                return;
           }
@@ -105,16 +105,20 @@ export default function Suggest ({ token })  {
            <div>
                 <p className="font-semibold text-slate-400 my-3">Suggested for you</p>
            </div>
-
            <div>
-               {
-                    users.map((user) => (
-                         <div key={user.username}>
-                              <div className="my-4 -mb-[6px] font-medium flex"><p className="flex-1">{user.username} </p><Follow token={token} username={user.username} onFollowToggle={handleFollowToggle}/></div>
-                              <p className="text-slate-500 text-xss mt-[5.5px]">Followed by...</p>
-                         </div>
-                    ))
-               }
+               {users !== null ? (
+               users.map((user) => (
+               <div key={user.username}>
+                    <div className="my-4 -mb-[6px] font-medium flex">
+                         <p className="flex-1">{user.username}</p>
+                         <Follow token={token} username={user.username} onFollowToggle={handleFollowToggle} />
+                    </div>
+                    <p className="text-slate-500 text-xss mt-[5.5px]">Followed by...</p>
+               </div>
+               ))
+               ) : (
+                    <p>No users to display</p>
+               )}
            </div>
            <div className="text-xs text-slate-400 mt-5">
                 <a href="#" className="mr-1">About</a>.
