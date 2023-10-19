@@ -91,7 +91,7 @@ export default function Content ({ token }) {
 
     return (
         <div className=' w-[1000px]'>
-            { !photos ? (
+            { photos.length > 0 ? (
                 photos.map((photo) => (
                     <div key={photo.id} className='bg-slate-50 pb-3 text-left text-sm'>
                         <div className="w-[500px] mx-auto">

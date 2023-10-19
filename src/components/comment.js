@@ -84,6 +84,9 @@ function HandleGetComment({ token, photoId, commentToggle }) {
         const responseJson = await response.json();
 
         if (responseJson.status === 200) {
+          if (responseJson.data == null){
+            return
+          }
           const filteredComments = responseJson.data.filter(
             // eslint-disable-next-line eqeqeq
             (comment) => comment.photoId == photoId
