@@ -6,7 +6,7 @@ export default function Content ({ token }) {
     
     const [photos, setPhotos] = useState([]);
     const [ likeNumbers, setLikeNumbers ] = useState({});
-    const [commentState, setCommentState ] = useState(false);
+    const [commentToggle, setCommentToggle ] = useState(false);
 
     const getPhoto = async () => {
         const url = 'http://localhost:8000/photos';
@@ -37,7 +37,7 @@ export default function Content ({ token }) {
               
                 return shuffledArray.slice(0, numItems);
               }
-            const randomPhotos = getRandomUsersFromArray(responseJson.data, 3)
+            const randomPhotos = getRandomUsersFromArray(responseJson.data, 7)
             setPhotos(randomPhotos);
 
             
@@ -64,7 +64,6 @@ export default function Content ({ token }) {
         const response = await fetch(url, requestOptions);
         const responseJson = await response.json();
         if (responseJson.status === 200){
-            console.log(responseJson.data)
             return responseJson.data;
         } else {
             console.log('failed to get like data : ', responseJson.message)
@@ -77,7 +76,7 @@ export default function Content ({ token }) {
         }
         getPhoto();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[token, commentState]);
+    },[token]);
 
     const handleLikeNumber = (photoId, likeNumber) => {
         setLikeNumbers(prevLikeNumber => ({
@@ -86,8 +85,8 @@ export default function Content ({ token }) {
         }));
     };
 
-    const handleCommentState = () => {
-        setCommentState(!commentState);
+    const handleCommentToggle = () => {
+        setCommentToggle(!commentToggle);
     }
 
     return (
@@ -116,8 +115,8 @@ export default function Content ({ token }) {
                             <p className="mt-3 text-xs font-semibold"> {likeNumbers[photo.id]} likes</p>
                         </div>
                         <p className='mt-3 text-xs pb-1 font-normal'><span className="font-semibold">{photo.user.username} </span>{photo.caption}</p>
-                        <HandleGetComment token={token} photoId={photo.id} commentState={commentState}/>
-                        <HandleWriteComment token={token} photoId={photo.id} onCommentState={handleCommentState}/>
+                        <HandleGetComment token={token} photoId={photo.id} commentToggle={commentToggle}/>
+                        <HandleWriteComment token={token} photoId={photo.id} onCommentToggle={handleCommentToggle}/>
                     </div>
                     <div className='border-b border-slate-300 w-[500px] mx-auto'> </div>
                 </div>

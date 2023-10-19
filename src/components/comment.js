@@ -10,7 +10,7 @@ function HandleCommentIcon () {
     )
 }
 
-function HandleWriteComment({ token, photoId, onCommentState }) {
+function HandleWriteComment({ token, photoId, onCommentToggle }) {
   const [message, setMessage] = useState('');
 
   const handleSubmitComment = async () => {
@@ -31,7 +31,7 @@ function HandleWriteComment({ token, photoId, onCommentState }) {
     const responseJson = await response.json();
     if (responseJson.status === 201){
       setMessage('');
-      onCommentState()
+      onCommentToggle()
     }else {
       console.log('failed to send comment : ', responseJson.message)
     }
@@ -62,7 +62,7 @@ function HandleWriteComment({ token, photoId, onCommentState }) {
 
 
 
-function HandleGetComment({ token, photoId, commentState }) {
+function HandleGetComment({ token, photoId, commentToggle }) {
   const [allComments, setAllComments] = useState([]);
   const [comments, setComments] = useState([]);
   const [showAllCommentsButton, setShowAllCommentsButton] = useState(false);
@@ -106,7 +106,7 @@ function HandleGetComment({ token, photoId, commentState }) {
     }
 
     fetchComments();
-  }, [photoId, token, url, commentState]);
+  }, [photoId, token, url, commentToggle]);
 
   const handleShowAllCommentsButton = () => {
     setComments(allComments);

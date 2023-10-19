@@ -5,7 +5,10 @@ import Follow from "./follow";
 export default function Suggest ({ token })  {
     const [username, setUsername] = useState('');
     const [name, setName] = useState('');
+    const [usersNotFiltered, setUsersNotFiltered] = useState([]);
     const [users, setUsers] = useState([]);
+    const [followings, setFollowings] = useState([]);
+    const [followToggle, setFollowToggle] = useState(true);
 
     const getUser = async () => {
     const url = 'http://localhost:8000/users'
@@ -39,33 +42,59 @@ export default function Suggest ({ token })  {
 
      const response = await fetch(url, requestOptions);
      const responseJson = await response.json();
-
-     const getRandomUsersFromArray = (arr, numItems) => {
-          if (numItems >= arr.length) {
-            return arr; 
-          }
-        
-          const shuffledArray = arr.slice();
-          for (let i = shuffledArray.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1)); 
-            [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; 
-          }
-        
-          return shuffledArray.slice(0, numItems);
-        }
-        const randomUsers = getRandomUsersFromArray(responseJson.data, 5)
-     setUsers(randomUsers);
-
+     setUsersNotFiltered(responseJson.data);
     }
 
-    useEffect(() => {
-        if(!token){
-            return ;
-        }
-        getUser();
-        getAllUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[token]);
+    const getFollowing = async () => {
+     const url = 'http://localhost:8000/follows/following'
+     const requestOptions = {
+          method: 'GET',
+          headers: {
+               'Authorization' : `Bearer ${token}`,
+               'Content-Type': 'application/json',
+          },
+     };
+     const response = await fetch(url, requestOptions);
+     const responseJson = await response.json();
+     setFollowings(responseJson.data);
+};
+     const handleFilterUsers = async () => {
+          if(!followings){
+               setUsers(usersNotFiltered);
+               return;
+          }
+          const filteredUsers = usersNotFiltered.filter((user) => {
+               
+               const isFollower = followings.some((following) => user.username === following.username);
+               return !isFollower;
+          })
+          setUsers(filteredUsers)
+     }
+     const handleFollowToggle = () => {
+          setFollowToggle(!followToggle);
+         }
+
+     useEffect(() => {
+          if (!token) {
+              return;
+          }
+          getUser();
+          getAllUsers();
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [token]);
+      
+      useEffect(() => {
+          if (!token) {
+               return;
+           }
+          getFollowing();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [followToggle]);
+      
+      useEffect(() => {
+          handleFilterUsers();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [followings, usersNotFiltered, followToggle]);
 
     return (
         <div className="bg-slate-50  w-1/5  max-w-xs text-xs min-h-screen">
@@ -81,7 +110,7 @@ export default function Suggest ({ token })  {
                {
                     users.map((user) => (
                          <div key={user.username}>
-                              <div className="my-4 -mb-[6px] font-medium flex"><p className="flex-1">{user.username} </p><Follow token={token} username={user.username}/></div>
+                              <div className="my-4 -mb-[6px] font-medium flex"><p className="flex-1">{user.username} </p><Follow token={token} username={user.username} onFollowToggle={handleFollowToggle}/></div>
                               <p className="text-slate-500 text-xss mt-[5.5px]">Followed by...</p>
                          </div>
                     ))
