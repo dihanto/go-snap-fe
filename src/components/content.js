@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import  Like  from "./like"
 import  { HandleCommentIcon, HandleGetComment, HandleWriteComment } from "./comment";
+import { host } from "./endpoint";
 
 export default function Content ({ token }) {
     
@@ -9,7 +10,6 @@ export default function Content ({ token }) {
     const [commentToggle, setCommentToggle ] = useState(false);
 
     const getPhoto = async () => {
-        const url = 'http://localhost:8000/photos';
         const requestOptions = {
             method: 'GET',
             headers: {
@@ -18,7 +18,7 @@ export default function Content ({ token }) {
             },
         };
 
-        const response = await fetch(url, requestOptions);
+        const response = await fetch(host.photoEndpoint.getPhoto(), requestOptions);
         const responseJson = await response.json();
         if (responseJson.status === 200){
             if(!responseJson.data){
@@ -53,7 +53,6 @@ export default function Content ({ token }) {
     };
 
     const handleIsLiked = async (photoId) => {
-        const url = `http://localhost:8000/photos/${photoId}/likes`;
         const requestOptions = {
             method: 'GET',
             headers: {
@@ -61,7 +60,7 @@ export default function Content ({ token }) {
               'Content-Type': 'application/json',
             },
         }
-        const response = await fetch(url, requestOptions);
+        const response = await fetch(host.photoEndpoint.likePhoto(photoId), requestOptions);
         const responseJson = await response.json();
         if (responseJson.status === 200){
             return responseJson.data;

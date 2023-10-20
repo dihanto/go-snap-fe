@@ -1,6 +1,7 @@
+import { host } from "./endpoint";
+
 export default function Follow({ token, username, onFollowToggle }) {
     const handleFollow = async () => {
-        const url = `http://localhost:8000/follows/${username}`;
         const requestOptions = {
             method: 'POST',
             headers: {
@@ -9,7 +10,7 @@ export default function Follow({ token, username, onFollowToggle }) {
             },
        };
 
-        const response = await fetch(url, requestOptions);
+        const response = await fetch(host.followEndpoint.follow(username), requestOptions);
         const responseJson = await response.json();
         if (responseJson.status === 200){
             onFollowToggle();

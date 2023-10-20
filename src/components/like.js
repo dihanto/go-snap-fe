@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import images from "./asset"
+import { host } from "./endpoint";
 
 export default function Like({ token, photoId, onLikeNumber, isLiked }) {
   const [like, setLike] = useState(false);
@@ -19,8 +20,6 @@ export default function Like({ token, photoId, onLikeNumber, isLiked }) {
   }, [photoId, initialStatusFetched, isLiked]);
    
   const handleLike = async () => {
-
-    const url = `http://localhost:8000/photos/${photoId}/likes`;
     const requestOptions = {
       method: 'POST',
       headers: {
@@ -29,7 +28,7 @@ export default function Like({ token, photoId, onLikeNumber, isLiked }) {
       },
     };
     
-      const response = await fetch(url, requestOptions);
+      const response = await fetch(host.likeEndpoint.like(photoId), requestOptions);
       const responseJson = await response.json();
       if (responseJson.status === 200){
         onLikeNumber(Number(responseJson.data.likeCount), photoId);
@@ -39,8 +38,6 @@ export default function Like({ token, photoId, onLikeNumber, isLiked }) {
   };
 
   const handleUnlike = async () => {
-
-    const url = `http://localhost:8000/photos/${photoId}/unlikes`;
     const requestOptions = {
       method: 'DELETE',
       headers: {
@@ -49,7 +46,7 @@ export default function Like({ token, photoId, onLikeNumber, isLiked }) {
       },
     };
     
-      const response = await fetch(url, requestOptions);
+      const response = await fetch(host.likeEndpoint.unlike(photoId), requestOptions);
       const responseJson = await response.json();
       if (responseJson.status === 200){
         onLikeNumber(Number(responseJson.data.likeCount), photoId)

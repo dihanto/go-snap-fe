@@ -1,5 +1,6 @@
 import {  useState } from "react"
 import { useNavigate} from "react-router-dom";
+import { host } from "./endpoint";
 
 
 export default function Register ( {onJwtToken} )  {
@@ -34,7 +35,6 @@ export default function Register ( {onJwtToken} )  {
             return
         }
 
-        const url = 'http://localhost:8000/users/register';
         const registerData = {
             username, name, email, password, age: parseInt(age, 10),
         };
@@ -46,7 +46,7 @@ export default function Register ( {onJwtToken} )  {
             body: JSON.stringify(registerData),
         };
 
-        const response = await fetch(url, requestOptions);
+        const response = await fetch(host.UserEndpoint.register(), requestOptions);
         const responseJson = await response.json();
 
         if (responseJson.status === 201){

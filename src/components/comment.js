@@ -2,6 +2,7 @@
 /* eslint-disable array-callback-return */
 import { useEffect, useState } from "react";
 import images from "./asset"
+import { host } from "./endpoint";
 function HandleCommentIcon () {
     return(
         <div>
@@ -14,7 +15,6 @@ function HandleWriteComment({ token, photoId, onCommentToggle }) {
   const [message, setMessage] = useState('');
 
   const handleSubmitComment = async () => {
-    const url = `http://localhost:8000/comments`;
     const commentData = {
       message,
       photoId,
@@ -27,7 +27,7 @@ function HandleWriteComment({ token, photoId, onCommentToggle }) {
       },
       body: JSON.stringify(commentData),
     };
-    const response = await fetch(url, requestOptions);
+    const response = await fetch(host.commentEndpoint.writeComment(), requestOptions);
     const responseJson = await response.json();
     if (responseJson.status === 201){
       setMessage('');
@@ -67,7 +67,6 @@ function HandleGetComment({ token, photoId, commentToggle }) {
   const [comments, setComments] = useState([]);
   const [showAllCommentsButton, setShowAllCommentsButton] = useState(false);
   const [commentCount, setCommentCount] = useState(0);
-  const url = 'http://localhost:8000/comments';
 
   useEffect(() => {
     async function fetchComments() {
@@ -80,7 +79,7 @@ function HandleGetComment({ token, photoId, commentToggle }) {
           },
         };
 
-        const response = await fetch(url, requestOptions);
+        const response = await fetch(host.commentEndpoint.getComment(), requestOptions);
         const responseJson = await response.json();
 
         if (responseJson.status === 200) {
@@ -109,7 +108,7 @@ function HandleGetComment({ token, photoId, commentToggle }) {
     }
 
     fetchComments();
-  }, [photoId, token, url, commentToggle]);
+  }, [photoId, token, commentToggle]);
 
   const handleShowAllCommentsButton = () => {
     setComments(allComments);

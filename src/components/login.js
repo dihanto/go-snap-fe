@@ -1,5 +1,6 @@
 import {  useState } from "react";
 import { useNavigate} from "react-router-dom";
+import { host } from "./endpoint";
 
 export default function Login  ({ onJwtToken })  {
     const [username, setUsername] = useState('');
@@ -21,7 +22,6 @@ export default function Login  ({ onJwtToken })  {
             return;
         };
 
-        const url = 'http://localhost:8000/users/login';
         const loginData = {
             username,
             password,
@@ -35,7 +35,7 @@ export default function Login  ({ onJwtToken })  {
             body: JSON.stringify(loginData),
         };
 
-        const response = await fetch(url, requestOptions);
+        const response = await fetch(host.UserEndpoint.login(), requestOptions);
         const responseJson = await response.json();
         if (responseJson.status === 200){
             onJwtToken(responseJson.data);

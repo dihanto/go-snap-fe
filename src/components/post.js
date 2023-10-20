@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { host } from "./endpoint";
 
 export default function PostPhoto ({ token })  {
     const [title, setTitle] = useState('');
@@ -20,7 +21,6 @@ export default function PostPhoto ({ token })  {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const url = 'http://localhost:8000/photos';
         const photoData = {
             title,
             caption,
@@ -35,7 +35,7 @@ export default function PostPhoto ({ token })  {
             body: JSON.stringify(photoData),
         };
 
-        const response = await fetch(url, requestOptions);
+        const response = await fetch(host.photoEndpoint.postPhoto(), requestOptions);
         const responseJson = await response.json();
         if (responseJson.status === 201){
             navigate('/');

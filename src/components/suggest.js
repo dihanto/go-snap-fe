@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useEffect, useState } from "react";
 import Follow from "./follow";
+import { host } from "./endpoint";
 
 export default function Suggest ({ token })  {
     const [username, setUsername] = useState('');
@@ -11,7 +12,6 @@ export default function Suggest ({ token })  {
     const [followToggle, setFollowToggle] = useState(true);
 
     const getUser = async () => {
-    const url = 'http://localhost:8000/users'
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -20,7 +20,7 @@ export default function Suggest ({ token })  {
         },
     };
 
-     const response = await fetch(url, requestOptions);
+     const response = await fetch(host.UserEndpoint.getUserLogin(), requestOptions);
      const responseJson = await response.json();
      if(responseJson.status === 200){
        setUsername(responseJson.data.username);
@@ -31,7 +31,6 @@ export default function Suggest ({ token })  {
     };
 
     const getAllUsers = async () => {
-     const url = 'http://localhost:8000/users/all'
      const requestOptions = {
           method: 'GET',
           headers: {
@@ -40,13 +39,12 @@ export default function Suggest ({ token })  {
           },
      };
 
-     const response = await fetch(url, requestOptions);
+     const response = await fetch(host.UserEndpoint.getAllUser(), requestOptions);
      const responseJson = await response.json();
      setUsersNotFiltered(responseJson.data);
     }
 
     const getFollowing = async () => {
-     const url = 'http://localhost:8000/follows/following'
      const requestOptions = {
           method: 'GET',
           headers: {
@@ -54,7 +52,7 @@ export default function Suggest ({ token })  {
                'Content-Type': 'application/json',
           },
      };
-     const response = await fetch(url, requestOptions);
+     const response = await fetch(host.followEndpoint.getFollowing(), requestOptions);
      const responseJson = await response.json();
      setFollowings(responseJson.data);
 };
