@@ -6,7 +6,6 @@ import  Suggest  from "./suggest";
 
 export default function Home({ token }){
     const navigate = useNavigate();
-    console.log(token)
 
     useEffect(() => {
         if (token) {

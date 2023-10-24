@@ -84,13 +84,16 @@ export default function Content({ token }) {
   }, [loadingMore, photos, requestOptions]);
 
   const handleScroll = useCallback(() => {
+    if(!token){
+      return
+    }
     const { innerHeight, scrollY } = window;
     const { offsetHeight } = document.body;
 
     if (innerHeight + scrollY >= offsetHeight - 200) {
       loadMorePhotos();
     }
-  }, [loadMorePhotos]);
+  }, [loadMorePhotos, token]);
 
   useEffect(() => {
     if (!token) return;

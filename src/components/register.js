@@ -1,4 +1,4 @@
-import {  useState } from "react"
+import {  useEffect, useState } from "react"
 import { useNavigate} from "react-router-dom";
 import { host } from "./endpoint";
 
@@ -10,7 +10,13 @@ export default function Register ({ onToken })  {
     const [password, setPassword] = useState('');
     const [age, setAge] = useState('');
     const [login, setLogin] = useState(false);
-    const navigate = useNavigate();   
+    const navigate = useNavigate();  
+    
+    useEffect(() =>{
+        onToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
+    
 
     const handleChange = (e) => {
         if (e.target.name === 'username'){
