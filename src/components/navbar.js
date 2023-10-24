@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Link } from "react-router-dom";
 import images from "./asset";
+import Logout from "./logout";
 
 export default function Navbar() {
     return (
@@ -30,6 +31,7 @@ export default function Navbar() {
                 <img src={images.create} alt="create" className="scale-90 mr-4"/> 
                 <Link to="/post">Create</Link>
             </div>
+            <Logout />
         </div>
     );
 };

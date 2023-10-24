@@ -3,16 +3,14 @@ import { useNavigate} from "react-router-dom";
 import { host } from "./endpoint";
 
 
-export default function Register ( {onJwtToken} )  {
+export default function Register ({ onToken })  {
     const [username, setUsername] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [age, setAge] = useState('');
     const [login, setLogin] = useState(false);
-    const navigate = useNavigate();
-    // onJwtToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTcxNjE3NzksImlkIjoiY2M3NjRlYjctMTA2NC00NjEyLTk5ZTUtNzBmZjJiZjI4MWZlIiwibGV2ZWwiOiJ1c2VyIiwidXNlcm5hbWUiOiJqb2hubGVub24ifQ.C2JgEHDlLYBuUfR5q8tXjKlhK1d39V9kYs--I-pehJw')
-    // navigate('/');
+    const navigate = useNavigate();   
 
     const handleChange = (e) => {
         if (e.target.name === 'username'){
@@ -65,7 +63,8 @@ export default function Register ( {onJwtToken} )  {
                const responseLogin = await fetch(urlLogin, requestOptionsLogin);
                const responseLoginJson = await responseLogin.json();
                if (responseLoginJson.status === 200){
-                 onJwtToken(responseLoginJson.data);
+                document.cookie = `jwt=${responseLoginJson.data}; path=/`;
+                onToken();
                 navigate('/');
                } else {
                 console.log(responseLogin.data);

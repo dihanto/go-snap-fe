@@ -2,7 +2,7 @@ import {  useState } from "react";
 import { useNavigate} from "react-router-dom";
 import { host } from "./endpoint";
 
-export default function Login  ({ onJwtToken })  {
+export default function Login  ({ onToken })  {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -38,7 +38,8 @@ export default function Login  ({ onJwtToken })  {
         const response = await fetch(host.UserEndpoint.login(), requestOptions);
         const responseJson = await response.json();
         if (responseJson.status === 200){
-            onJwtToken(responseJson.data);
+            document.cookie = `jwt=${responseJson.data}; path=/`;
+            onToken();
             navigate('/');
         } else {
             console.log('Login failed :', responseJson.message);

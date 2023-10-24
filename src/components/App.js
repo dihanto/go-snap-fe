@@ -3,24 +3,22 @@ import  PostPhoto  from "./post";
 import  Home from "./home";
 import  Register from "./register";
 import  Login  from "./login";
+import GetCookie from './cookieUtils';
 import { useState } from 'react';
 function App() {
-
-  const [jwtToken, setJwtToken] = useState('');
-
-  const handleJwtToken = (token) => {
-      setJwtToken(token)
+  const [token, setToken] = useState('');
+  const handleToken = () => {
+    setToken(GetCookie('jwt'))
   }
-
 
   return (
     <div>
       <Router>
       <Routes>
-          <Route path='/post' element={<PostPhoto token={jwtToken}/>} />
-          <Route path='/' element={<Home token={jwtToken}/>} />
-          <Route path='/register' element={<Register onJwtToken={handleJwtToken}/>} />
-          <Route path='/login' element={<Login onJwtToken={handleJwtToken}/>} />
+          <Route path='/post' element={<PostPhoto token={token}/>} />
+          <Route path='/' element={<Home token={token}/>} />
+          <Route path='/register' element={<Register onToken={handleToken}/>} />
+          <Route path='/login' element={<Login onToken={handleToken}/>} />
         </Routes>
     </Router>
     </div>
