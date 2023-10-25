@@ -4,13 +4,11 @@ import Follow from "./follow";
 import { host } from "./endpoint";
 import { Link } from "react-router-dom";
 
-export default function Suggest ({ token, onUserLogin })  {
+export default function Suggest ({ token, onUserLogin, onFollowToggle, followings, followToggle })  {
     const [username, setUsername] = useState('');
     const [name, setName] = useState('');
     const [usersNotFiltered, setUsersNotFiltered] = useState([]);
     const [users, setUsers] = useState([]);
-    const [followings, setFollowings] = useState([]);
-    const [followToggle, setFollowToggle] = useState(true);
 
     const getUser = async () => {
     const requestOptions = {
@@ -45,18 +43,7 @@ export default function Suggest ({ token, onUserLogin })  {
      setUsersNotFiltered(responseJson.data);
     }
 
-    const getFollowing = async () => {
-     const requestOptions = {
-          method: 'GET',
-          headers: {
-               'Authorization' : `Bearer ${token}`,
-               'Content-Type': 'application/json',
-          },
-     };
-     const response = await fetch(host.followEndpoint.getFollowing(), requestOptions);
-     const responseJson = await response.json();
-     setFollowings(responseJson.data);
-};
+    
      const handleFilterUsers = async () => {
           if(!followings || !usersNotFiltered){
                setUsers(usersNotFiltered);
@@ -69,9 +56,7 @@ export default function Suggest ({ token, onUserLogin })  {
           })
           setUsers(filteredUsers)
      }
-     const handleFollowToggle = () => {
-          setFollowToggle(!followToggle);
-         }
+     
 
      useEffect(() => {
           if (!token) {
@@ -86,14 +71,6 @@ export default function Suggest ({ token, onUserLogin })  {
           onUserLogin(username)
       // eslint-disable-next-line react-hooks/exhaustive-deps
       })
-      
-      useEffect(() => {
-          if (!token) {
-               return;
-           }
-          getFollowing();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [followToggle]);
       
       useEffect(() => {
           handleFilterUsers();
@@ -117,7 +94,7 @@ export default function Suggest ({ token, onUserLogin })  {
                <div key={user.username}>
                     <div className="my-4 -mb-[6px] font-medium flex">
                          <p className="flex-1">{user.username}</p>
-                         <Follow token={token} username={user.username} onFollowToggle={handleFollowToggle} />
+                         <Follow token={token} username={user.username} onFollowToggle={onFollowToggle} />
                     </div>
                     <p className="text-slate-500 text-xss mt-[5.5px]">Followed by...</p>
                </div>

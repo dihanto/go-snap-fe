@@ -25,6 +25,9 @@ const host = {
         },
         getFollowing: () => {
             return `${host.baseUrl}/follows/following`;
+        },
+        getFollower: () => {
+            return `${host.baseUrl}/follows/follower`; 
         }
     },
     likeEndpoint : {
