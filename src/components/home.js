@@ -4,7 +4,7 @@ import  Navbar  from "./navbar";
 import  Content  from "./content";
 import  Suggest  from "./suggest";
 
-export default function Home({ token }){
+export default function Home({ token, onUserLogin }){
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -22,7 +22,7 @@ export default function Home({ token }){
             <div className=" flex">
               <div className=' w-1/5'>  </div>
               <Content token={token}  /> 
-              <Suggest token={token} />
+              <Suggest token={token} onUserLogin={onUserLogin}/>
             </div>
           </div>
     )

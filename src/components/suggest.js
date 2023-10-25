@@ -2,8 +2,9 @@
 import { useEffect, useState } from "react";
 import Follow from "./follow";
 import { host } from "./endpoint";
+import { Link } from "react-router-dom";
 
-export default function Suggest ({ token })  {
+export default function Suggest ({ token, onUserLogin })  {
     const [username, setUsername] = useState('');
     const [name, setName] = useState('');
     const [usersNotFiltered, setUsersNotFiltered] = useState([]);
@@ -80,6 +81,11 @@ export default function Suggest ({ token })  {
           getAllUsers();
           // eslint-disable-next-line react-hooks/exhaustive-deps
       }, [token]);
+
+      useEffect(()=> {
+          onUserLogin(username)
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      })
       
       useEffect(() => {
           if (!token) {
@@ -97,7 +103,9 @@ export default function Suggest ({ token })  {
     return (
         <div className="bg-slate-50  w-1/5  max-w-xs text-xs min-h-screen">
            <div>
+               <Link to='/user' >
                 <p className="mt-10 -mb-[6px] font-semibold">{ username }</p>
+               </Link>
                 <p className="text-slate-500">{ name }</p>
            </div>
            <div>
