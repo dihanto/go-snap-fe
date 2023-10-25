@@ -65,11 +65,18 @@ export default function Content({ token }) {
       const responseJson = await response.json();
 
       if (responseJson.status === 200 && responseJson.data) {
-        const newRandomPhotos = getRandomPhotos(responseJson.data, 7);
+        const newRandomPhotos = getRandomPhotos(responseJson.data, 2);
         const filteredNewPhotos = newRandomPhotos.filter(
           photo => !photos.find(existingPhoto => existingPhoto.id === photo.id)
         );
-
+        const initialLikeNumbers = {}
+        filteredNewPhotos.forEach(photo => {
+          initialLikeNumbers[photo.id] = photo.like.likeCount;
+        });
+        setLikeNumbers(prevLikeNumbers => ({
+          ...prevLikeNumbers,
+          ...initialLikeNumbers,
+        }));
         setPhotos(prevPhotos => [...prevPhotos, ...filteredNewPhotos]);
         setPhotosToDisplay(prev => prev + filteredNewPhotos.length);
 
