@@ -1,5 +1,5 @@
 const host = {
-    baseUrl: 'http://localhost:8000',
+    baseUrl: 'http://10.184.0.7:8000',
     commentEndpoint : {
         writeComment: () => {
             return `${host.baseUrl}/comments`;
