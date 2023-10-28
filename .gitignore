@@ -10,6 +10,7 @@
 
 # production
 /build
+endpoint-gcp.js
 
 # misc
 .DS_Store

@@ -54,7 +54,7 @@ export default function Register ({ onToken })  {
         const responseJson = await response.json();
 
         if (responseJson.status === 201){
-                const urlLogin = 'http://localhost:8000/users/login';
+                const urlLogin = host.UserEndpoint.login();
                 const loginData = {
                     username, password
                 }
