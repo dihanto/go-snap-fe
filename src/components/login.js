@@ -1,6 +1,7 @@
 import {  useState } from "react";
 import { useNavigate} from "react-router-dom";
 import { host } from "./endpoint";
+import FetchApi from "./utils";
 
 export default function Login  ({ onToken })  {
     const [username, setUsername] = useState('');
@@ -8,12 +9,14 @@ export default function Login  ({ onToken })  {
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        if (e.target.name === 'username') {
-            setUsername(e.target.value);
-        } else if (e.target.name === 'password') {
-            setPassword(e.target.value);
-        };
+        const { name, value } = e.target;
+        if (name === 'username') {
+          setUsername(value);
+        } else if (name === 'password') {
+          setPassword(value);
+        }
     };
+      
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -35,14 +38,13 @@ export default function Login  ({ onToken })  {
             body: JSON.stringify(loginData),
         };
 
-        const response = await fetch(host.UserEndpoint.login(), requestOptions);
-        const responseJson = await response.json();
-        if (responseJson.status === 200){
-            document.cookie = `jwt=${responseJson.data}; path=/`;
+        const response = await FetchApi(host.UserEndpoint.login(), requestOptions)
+        if (response.status === 200){
+            document.cookie = `jwt=${response.data}; path=/`;
             onToken();
             navigate('/');
         } else {
-            console.log('Login failed :', responseJson.message);
+            console.log('Login failed :', response.message);
         };
     };
 
