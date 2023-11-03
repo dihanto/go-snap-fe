@@ -44,18 +44,21 @@ export default function Suggest ({ token, onUserLogin, onFollowToggle, following
     }
 
     
-     const handleFilterUsers = async () => {
-          if(!followings || !usersNotFiltered){
-               setUsers(usersNotFiltered);
-               return;
-          }
-          const filteredUsers = usersNotFiltered.filter((user) => {
-               
-               const isFollower = followings.some((following) => user.username === following.username);
-               return !isFollower;
-          })
-          setUsers(filteredUsers)
-     }
+    const handleFilterUsers = async () => {
+     if (!usersNotFiltered) {
+       return;
+     };
+     if (!followings){
+          setUsers(usersNotFiltered);
+     };
+   
+     const filteredUsers = usersNotFiltered.filter((user) => {
+       return !followings.includes(user.username);
+     });
+   
+     setUsers(filteredUsers);
+   };
+   
      
 
      useEffect(() => {

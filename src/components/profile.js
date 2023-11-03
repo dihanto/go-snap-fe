@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import { host } from "./endpoint";
 import Navbar from "./navbar";
 
-export default function Profile({ token, userLogin, followings }) {
+export default function Profile({ token, userLogin, followingCount }) {
   const [userPhoto, setUserPhoto] = useState([]);
   const [followerCount, setFollowerCount] = useState(0);
-  const [followingCount, setFollowingCount] = useState(0);
 
   const requestOptions = {
       method: "GET",
@@ -39,11 +38,6 @@ export default function Profile({ token, userLogin, followings }) {
   }
 
   useEffect(() => {
-    if(!followings){
-      setFollowingCount(0)
-    } else{
-    setFollowingCount(followings.length)
-    }
     getPhoto();
     getFollower();
     // eslint-disable-next-line react-hooks/exhaustive-deps
