@@ -17,6 +17,9 @@ function App() {
 
 
   const getFollowing = async () => {
+    if (token === undefined){
+      return;
+    }
     const requestOptions = {
          method: 'GET',
          headers: {
@@ -26,8 +29,8 @@ function App() {
     };
     const response = await fetch(host.followEndpoint.getFollowing(), requestOptions);
     const responseJson = await response.json();
-    if (responseJson.data.username === null){
-      return;
+    if (responseJson.data === null){
+      return
     }
     setFollowings(responseJson.data.username);
     setFollowingCount(responseJson.data.followingCount);
