@@ -84,7 +84,7 @@ export default function Suggest ({ token, onUserLogin, onFollowToggle, following
         <div className="bg-slate-50  w-1/5  max-w-xs text-xs min-h-screen">
            <div>
                <Link to='/user' >
-                <p className="mt-10 -mb-[6px] font-semibold">{ username }</p>
+                <p className="mt-5 -mb-[4px] font-semibold">{ username }</p>
                </Link>
                 <p className="text-slate-500">{ name }</p>
            </div>
