@@ -3,7 +3,7 @@ import { useNavigate} from "react-router-dom";
 import { host } from "./endpoint";
 
 
-export default function Register ({ onToken })  {
+export default function Register ({ onToken, token })  {
     const [username, setUsername] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -11,11 +11,16 @@ export default function Register ({ onToken })  {
     const [age, setAge] = useState('');
     const [login, setLogin] = useState(false);
     const navigate = useNavigate();  
+
+    
     
     useEffect(() =>{
         onToken();
+        if(token){
+            navigate('/')
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
+    },[token])
     
 
     const handleChange = (e) => {

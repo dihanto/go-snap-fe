@@ -1,19 +1,19 @@
 import React from "react";
 
-export default function Logout() {
+const clearJWTFromCookies = () => {
+  document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+};
+
+export default function Logout({ onToken }) {
 
   const handleLogout = () => {
     clearJWTFromCookies();
-    window.location.reload();
-  };
-
-  const clearJWTFromCookies = () => {
-    document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    onToken();
   };
 
   return (
-    <div className="ml-5 py-4 flex">
+    <section className="ml-5 py-4 flex">
       <button onClick={handleLogout}>Logout</button>
-    </div>
+    </section>
   );
 }

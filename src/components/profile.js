@@ -2,12 +2,20 @@ import { useEffect, useState } from "react";
 import { host } from "./endpoint";
 import Navbar from "./navbar";
 import FetchApi from "./utils";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import images from "./asset";
 
-export default function Profile({ token, userLogin, followingCount, profilePicture }) {
+export default function Profile({ token, userLogin, followingCount, profilePicture, onToken }) {
   const [userPhoto, setUserPhoto] = useState([]);
   const [followerCount, setFollowerCount] = useState(0);
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!token) {
+        navigate('/register');
+    } 
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [token]);
 
   const requestOptions = {
       method: "GET",
@@ -48,11 +56,11 @@ export default function Profile({ token, userLogin, followingCount, profilePictu
 
   return (
     <div>
-      <Navbar />
-      <div className="bg-slate-50 p-4 flex">
+      <Navbar onToken={onToken}/>
+      <div className="bg-slate-50 p-4 h-screen flex">
         <div className="w-1/5"></div>
         <div className="w-4/5 px-20"> 
-          <div className="flex justify-center mt-5 text-sm">
+          <div className="flex mt-5 ml-16 text-sm">
             <div className="mr-5 w-[150px] h-[150px] ring-2 ring-slate-600 rounded-full flex justify-center items-center">
               <div className="ring-1 ring-slate-400 rounded-full">
                 <img
@@ -77,7 +85,10 @@ export default function Profile({ token, userLogin, followingCount, profilePictu
                   </div>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-1 mt-4">
+          <div className="border border-slate-300 mt-10">
+
+          </div>
+          <div className="grid grid-cols-3 gap-1 mt-1">
               {userPhoto.map((photo) => (
               <div key={photo.id} className="relative aspect-square">
                   <img
@@ -94,8 +105,16 @@ export default function Profile({ token, userLogin, followingCount, profilePictu
   );
 }
 
-function UpdateProfile ({ token, userLogin, profilePicture }){
+function UpdateProfile ({ token, userLogin, profilePicture, onToken }){
   const [updateProfilePicture, setUpdateProfilePicture] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token) {
+        navigate('/register');
+    } 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   const handleChange = (e) => {
     if(e.target.name === 'profilePicture'){
@@ -132,7 +151,7 @@ function UpdateProfile ({ token, userLogin, profilePicture }){
 
   return (
     <div className="bg-slate-50 flex text-sm">
-      <Navbar />
+      <Navbar onToken={onToken}/>
       <div className="w-1/5"></div>
       <div className="w-4/5 ml-28">
         <h1 className="text-lg mt-7 ml-4 mb-3">Edit Profile</h1>

@@ -16,6 +16,7 @@ function App() {
   const [followToggle, setFollowToggle] = useState(true);
   const [profilePicture, setProfilePicture] = useState(null)
 
+  console.log(token)
 
   const getFollowing = async () => {
     if (token === undefined){
@@ -47,10 +48,7 @@ function App() {
     }, [token, followToggle]);
 
   const handleToken = () => {
-    const newToken = GetCookie('jwt');
-    if (newToken && newToken.trim() !== '') {
-      setToken(newToken);
-    }
+    setToken(GetCookie('jwt'));
   }
 
   const handleUserLogin = (username) => {
@@ -65,12 +63,12 @@ function App() {
     <div>
       <Router>
       <Routes>
-          <Route path='/user' element={<Profile token={token} userLogin={userLogin} followingCount={followingCount} profilePicture={profilePicture}/>} />
-          <Route path='/user/update' element={<UpdateProfile token={token} userLogin={userLogin}  profilePicture={profilePicture}/>} />
+          <Route path='/user' element={<Profile token={token} userLogin={userLogin} followingCount={followingCount} profilePicture={profilePicture} onToken={handleToken}/>} />
+          <Route path='/user/update' element={<UpdateProfile token={token} userLogin={userLogin}  profilePicture={profilePicture} onToken={handleToken}/>} />
           <Route path='/post' element={<PostPhoto token={token} />} />
-          <Route path='/' element={<Home token={token} onUserLogin={handleUserLogin} onFollowToggle={handleFollowToggle} followings={followings} followToggle={followToggle} onProfilePicture={handleProfilePicture} profilePicture={profilePicture}/>} />
-          <Route path='/register' element={<Register onToken={handleToken}/>} />
-          <Route path='/login' element={<Login onToken={handleToken}/>} />
+          <Route path='/' element={<Home token={token} onUserLogin={handleUserLogin} onFollowToggle={handleFollowToggle} followings={followings} followToggle={followToggle} onProfilePicture={handleProfilePicture} profilePicture={profilePicture} onToken={handleToken}/>} />
+          <Route path='/register' element={<Register onToken={handleToken} token={token}/>} />
+          <Route path='/login' element={<Login onToken={handleToken}/>} token={token}/>
         </Routes>
     </Router>
     </div>

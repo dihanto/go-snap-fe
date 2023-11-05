@@ -4,7 +4,7 @@ import  Navbar  from "./navbar";
 import  Content  from "./content";
 import  Suggest  from "./suggest";
 
-export default function Home({ token, onUserLogin, onFollowToggle, followings, followToggle, onProfilePicture, profilePicture }){
+export default function Home({ token, onUserLogin, onFollowToggle, followings, followToggle, onProfilePicture, profilePicture, onToken }){
 
     const navigate = useNavigate();
 
@@ -19,7 +19,7 @@ export default function Home({ token, onUserLogin, onFollowToggle, followings, f
 
     return (
         <div className="font-sans">
-          <Navbar />
+          <Navbar onToken={onToken}/>
             <div className=" flex">
               <div className=' w-1/5'>  </div>
               <Content token={token}  /> 
