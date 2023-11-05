@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { host } from "./endpoint";
 import styled from "styled-components";
 
+const LikeSVG = styled.svg`
+    fill: #db0000;
+    `;
+
 export default function Like({ token, photoId, onLikeNumber, isLiked }) {
   const [like, setLike] = useState(false);
   const [initialStatusFetched, setInitialStatusFetched] = useState(false);
-  const LikeSVG = styled.svg`
-    fill: #db0000;
-    `;
+  
 
   useEffect(() => {
     if (!initialStatusFetched) {

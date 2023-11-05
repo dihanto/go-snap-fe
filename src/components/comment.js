@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { host } from "./endpoint";
 import styled from "styled-components";
 
+const StyledSVG = styled.svg`fill: #0a1f42;`;
+
 function HandleCommentIcon () {
-  const StyledSVG = styled.svg`
-  fill: #0a1f42;
-  `;
+
     return(
         <div className="mt-[10px] scale-[.85]">
           <StyledSVG xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 0 512 512">
