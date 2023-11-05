@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import Follow from "./follow";
 import { host } from "./endpoint";
 import { Link } from "react-router-dom";
+import images from "./asset";
 
 export default function Suggest ({ token, onUserLogin, onFollowToggle, followings, followToggle })  {
     const [username, setUsername] = useState('');
     const [name, setName] = useState('');
     const [usersNotFiltered, setUsersNotFiltered] = useState([]);
     const [users, setUsers] = useState([]);
+    const [profilePicture, setProfilePicture] = useState('');
 
     const getUser = async () => {
     const requestOptions = {
@@ -24,6 +26,10 @@ export default function Suggest ({ token, onUserLogin, onFollowToggle, following
      if(responseJson.status === 200){
        setUsername(responseJson.data.username);
        setName(responseJson.data.name);
+       if (responseJson.data.profilePicture === 'empty'){
+          return;
+       }
+       setProfilePicture(responseJson.data.profilePicture);
      } else {
        console.log('failed to get user data : ', responseJson.message);
      };
@@ -82,11 +88,14 @@ export default function Suggest ({ token, onUserLogin, onFollowToggle, following
 
     return (
         <div className="bg-slate-50  w-1/5  max-w-xs text-xs min-h-screen">
-           <div>
+           <div className="flex mt-5">
+               <div className="mr-2">
+                    <img src={profilePicture || images.profilePicture} alt="profilePicture" className="w-8 h-8 rounded-full object-cover"></img>
+               </div>
                <Link to='/user' >
-                <p className="mt-5 -mb-[4px] font-semibold">{ username }</p>
+                    <p className="-mb-[4px] font-semibold">{ username }</p>
+                    <p className="text-slate-500">{ name }</p>
                </Link>
-                <p className="text-slate-500">{ name }</p>
            </div>
            <div>
                 <p className="font-semibold text-slate-400 my-3">Suggested for you</p>
