@@ -43,7 +43,7 @@ function App() {
   useEffect(() => {
       getFollowing();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [followToggle]);
+    }, [token, followToggle]);
 
   const handleToken = () => {
     const newToken = GetCookie('jwt');
