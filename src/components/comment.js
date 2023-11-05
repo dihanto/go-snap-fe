@@ -7,7 +7,6 @@ import styled from "styled-components";
 const StyledSVG = styled.svg`fill: #0a1f42;`;
 
 function HandleCommentIcon () {
-
     return(
         <div className="mt-[10px] scale-[.85]">
           <StyledSVG xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 0 512 512">
@@ -52,7 +51,7 @@ function HandleWriteComment({ token, photoId, onCommentToggle }) {
 
   return (
     <div>
-      <form className="text-xs">
+      <form className="text-sm2 leading-sm2 mt-1">
         <input
           type="text"
           value={message}
@@ -66,12 +65,10 @@ function HandleWriteComment({ token, photoId, onCommentToggle }) {
   );
 }
 
-
-
 function HandleGetComment({ token, photoId, commentToggle }) {
   const [allComments, setAllComments] = useState([]);
   const [comments, setComments] = useState([]);
-  const [showAllCommentsButton, setShowAllCommentsButton] = useState(false);
+  const [showAllCommentsToggle, setShowAllCommentsToggle] = useState(false);
   const [commentCount, setCommentCount] = useState(0);
 
   useEffect(() => {
@@ -98,13 +95,9 @@ function HandleGetComment({ token, photoId, commentToggle }) {
           );
           setAllComments(filteredComments);
           setCommentCount(filteredComments.length);
-
-          if (filteredComments.length > 2) {
-            setComments(filteredComments.slice(-2));
-            setShowAllCommentsButton(true);
-          } else {
-            setComments(filteredComments);
-          }
+          setComments(filteredComments);
+          setShowAllCommentsToggle(false)
+          
         } else {
           console.log('Gagal mengambil komentar:', responseJson.message);
         }
@@ -116,25 +109,35 @@ function HandleGetComment({ token, photoId, commentToggle }) {
     fetchComments();
   }, [photoId, token, commentToggle]);
 
-  const handleShowAllCommentsButton = () => {
+  const handleShowAllCommentsToggle = () => {
     setComments(allComments);
-    setShowAllCommentsButton(false);
+    setShowAllCommentsToggle(!showAllCommentsToggle);
   };
 
   return (
-    <div>
-      {comments.map((comment) => (
-        <div key={comment.id}>
-          <p className="text-xs my-1"><span className="font-semibold">{comment.User.username} </span>{comment.message}</p>
-        </div>
-      ))}
-      {showAllCommentsButton && (
+    <div className="mt-1">
+      {showAllCommentsToggle ? (
         <div>
-        <button className="text-xs text-slate-600 font-normal" onClick={handleShowAllCommentsButton}>View all {commentCount} comments</button>
-      </div>
+          {comments.map((comment) => (
+            <div key={comment.id}>
+              <p className="text-sm2 leading-sm2 mb-1">
+                <span className="font-semibold">{comment.User.username} </span>
+                {comment.message}
+              </p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <button
+          className="text-sm2 leading-sm2 text-slate-600 font-normal"
+          onClick={handleShowAllCommentsToggle}
+          style={{ display: comments.length > 0 ? 'block' : 'none'}}
+        >
+          View all {commentCount} comments
+        </button>
       )}
     </div>
-  )
+  );
 }
 
   export { HandleWriteComment, HandleCommentIcon, HandleGetComment };
