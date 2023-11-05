@@ -5,7 +5,7 @@ import  Register from "./register";
 import  Login  from "./login";
 import GetCookie from './cookieUtils';
 import {  useEffect, useState } from 'react';
-import Profile from './profile';
+import Profile, { UpdateProfile } from './profile';
 import { host } from './endpoint';
 function App() {
 
@@ -14,6 +14,7 @@ function App() {
   const [followings, setFollowings] = useState([]);
   const [followingCount, setFollowingCount] = useState(0);
   const [followToggle, setFollowToggle] = useState(true);
+  const [profilePicture, setProfilePicture] = useState(null)
 
 
   const getFollowing = async () => {
@@ -56,13 +57,18 @@ function App() {
     setUserLogin(username);
   }
   
+  const  handleProfilePicture = (profilePicture) => {
+    setProfilePicture(profilePicture);
+  }
+  
   return (
     <div>
       <Router>
       <Routes>
-          <Route path='/user' element={<Profile token={token} userLogin={userLogin} followingCount={followingCount}/>} />
+          <Route path='/user' element={<Profile token={token} userLogin={userLogin} followingCount={followingCount} profilePicture={profilePicture}/>} />
+          <Route path='/user/update' element={<UpdateProfile token={token} userLogin={userLogin}  profilePicture={profilePicture}/>} />
           <Route path='/post' element={<PostPhoto token={token} />} />
-          <Route path='/' element={<Home token={token} onUserLogin={handleUserLogin} onFollowToggle={handleFollowToggle} followings={followings} followToggle={followToggle}/>} />
+          <Route path='/' element={<Home token={token} onUserLogin={handleUserLogin} onFollowToggle={handleFollowToggle} followings={followings} followToggle={followToggle} onProfilePicture={handleProfilePicture} profilePicture={profilePicture}/>} />
           <Route path='/register' element={<Register onToken={handleToken}/>} />
           <Route path='/login' element={<Login onToken={handleToken}/>} />
         </Routes>

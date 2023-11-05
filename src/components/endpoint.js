@@ -50,6 +50,9 @@ const host = {
         },
         getAllUser : () => {
             return `${host.baseUrl}/users/all`;
+        },
+        updateUser : () => {
+            return `${host.baseUrl}/users`;
         }
     }
 }

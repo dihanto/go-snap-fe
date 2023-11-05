@@ -5,8 +5,7 @@ import { host } from "./endpoint";
 export default function PostPhoto({ token }) {
   const [title, setTitle] = useState("");
   const [caption, setCaption] = useState("");
-  const [photoFile, setPhotoFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null); // Added state for image preview
+  const [imagePreview, setImagePreview] = useState(null);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -15,9 +14,6 @@ export default function PostPhoto({ token }) {
     } else if (e.target.name === "caption") {
       setCaption(e.target.value);
     } else if (e.target.name === "photoBase64") {
-      setPhotoFile(e.target.files[0]);
-
-      // Display a preview of the selected image
       if (e.target.files.length > 0) {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -31,22 +27,17 @@ export default function PostPhoto({ token }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!photoFile) {
-      alert("Please select a photo");
-      return;
-    }
-
     const requestData = {
       title: title,
       caption: caption,
-      photoBase64: imagePreview, // Use the preview image instead of base64Image
+      photoBase64: imagePreview,
     };
 
     const requestOptions = {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestData),
     };

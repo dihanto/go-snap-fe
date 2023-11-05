@@ -72,7 +72,7 @@ export default function Like({ token, photoId, onLikeNumber, isLiked }) {
   };
 
   return (
-    <div className="mt-[10px]">
+    <div className="mt-[10px] -ml-[2px]">
       <button onClick={handleClick}
         className={`transform ${like ? 'scale-90' : 'scale-[.85]'} transition-transform duration-300 ease-in-out`}
         >
