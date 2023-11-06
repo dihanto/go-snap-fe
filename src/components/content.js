@@ -135,7 +135,7 @@ export default function Content({ token }) {
   };
 
   return (
-    <div className='w-[1000px] pt-5'>
+    <div className='w-4/6 flex-1 mx-auto pt-5'>
     {isLoading ? (
       <SkeletonLoader />
     ) : (

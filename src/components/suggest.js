@@ -86,7 +86,7 @@ export default function Suggest ({ token, onUserLogin, onFollowToggle, following
       }, [followings, usersNotFiltered, followToggle]);
 
     return (
-        <div className="bg-slate-50  w-1/5  max-w-sm text-sm min-h-screen">
+        <div className="bg-slate-50  w-1/5 flex-1 max-w-sm text-sm min-h-screen">
            <div className="flex mt-5">
                <div className="mr-2">
                     <img src={profilePicture || images.profilePicture} alt="profilePicture" className="w-9 h-9 rounded-full object-cover"></img>

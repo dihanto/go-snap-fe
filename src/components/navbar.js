@@ -6,7 +6,7 @@ import Logout from "./logout";
 export default function Navbar({ onToken }) {
     return (
         <div className="bg-slate-50   w-1/5 max-w-[250px] text-sm  fixed  h-screen  border-r-[1px]  border-slate-300">
-            <p className="text-left ml-10 mt-3 text-2xl"> Gosnap </p>
+            <p className="text-left ml-10 mt-5 text-2xl"> Gosnap </p>
             <div className="ml-5 py-4 mt-3 flex">
                 <img src={images.home} alt="home" className="scale-90 mr-4" /> 
                 <Link to="/">Home</Link>

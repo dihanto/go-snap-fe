@@ -18,13 +18,11 @@ export default function Home({ token, onUserLogin, onFollowToggle, followings, f
     }, [token]);
 
     return (
-        <div className="font-sans">
+        <div className="font-sans flex relative">
           <Navbar onToken={onToken}/>
-            <div className=" flex">
-              <div className=' w-1/5'>  </div>
-              <Content token={token}  /> 
-              <Suggest token={token} onUserLogin={onUserLogin} onFollowToggle={onFollowToggle} followings={followings} followToggle={followToggle} onProfilePicture={onProfilePicture} profilePicture={profilePicture}/>
-            </div>
-          </div>
+          <div className="w-1/5 max-w-[250px]"></div>
+          <Content token={token}  /> 
+          <Suggest token={token} onUserLogin={onUserLogin} onFollowToggle={onFollowToggle} followings={followings} followToggle={followToggle} onProfilePicture={onProfilePicture} profilePicture={profilePicture}/>
+        </div>
     )
 }
