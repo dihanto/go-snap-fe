@@ -19,7 +19,7 @@ export default function Home({ token, onUserLogin, onFollowToggle, followings, f
 
     return (
         <div className="font-sans flex relative">
-          <Navbar onToken={onToken}/>
+          <Navbar onToken={onToken} onProfilePicture={onProfilePicture}/>
           <div className="w-1/5 max-w-[250px]"></div>
           <Content token={token}  /> 
           <Suggest token={token} onUserLogin={onUserLogin} onFollowToggle={onFollowToggle} followings={followings} followToggle={followToggle} onProfilePicture={onProfilePicture} profilePicture={profilePicture}/>

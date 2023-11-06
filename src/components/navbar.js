@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import images from "./asset";
 import Logout from "./logout";
 
-export default function Navbar({ onToken }) {
+export default function Navbar({ onToken, onProfilePicture }) {
     return (
         <div className="bg-slate-50   w-1/5 max-w-[250px] text-sm  fixed  h-screen  border-r-[1px]  border-slate-300">
             <p className="text-left ml-10 mt-5 text-2xl"> Gosnap </p>
@@ -31,7 +31,7 @@ export default function Navbar({ onToken }) {
                 <img src={images.create} alt="create" className="scale-90 mr-4"/> 
                 <Link to="/post">Create</Link>
             </div>
-            <Logout onToken={onToken}/>
+            <Logout onToken={onToken} onProfilePicture={onProfilePicture}/>
         </div>
     );
 };
