@@ -3,6 +3,7 @@ import Like from "./like";
 import { HandleCommentIcon, HandleGetComment, HandleWriteComment } from "./comment";
 import { host } from "./endpoint";
 import SkeletonLoader from "./skeleton";
+import images from "./asset";
 
 export default function Content({ token }) {
   const [photos, setPhotos] = useState([]);
@@ -134,16 +135,22 @@ export default function Content({ token }) {
   };
 
   return (
-    <div className='w-[1000px]'>
+    <div className='w-[1000px] pt-5'>
     {isLoading ? (
       <SkeletonLoader />
     ) : (
       photos.slice(0, photosToDisplay).map((photo) => (
           <div key={photo.id} className='bg-slate-50 pb-3 text-left text-sm'>
-            <div className='w-[500px] mx-auto'>
-              <p className='py-3 font-semibold'>{photo.user.username}</p>
+            <div className='w-[500px] h-[37px] mx-auto items-center flex'>
+              <img src={
+                photo.user.profilePicture !== 'empty'
+                ?
+                photo.user.profilePicture
+                :  images.profilePicture
+                } alt="profile" className="w-8 h-8 object-cover rounded-full mr-2 "></img>
+              <p className='font-semibold'>{photo.user.username}</p>
             </div>
-            <div className='flex items-center justify-center w-[500px] h-[500px] bg-black mx-auto'>
+            <div className='flex items-center justify-center w-[500px] h-[500px] bg-black mx-auto mt-1'>
               <img src={photo.photoBase64} alt={photo.title} className='rounded-sm max-w-full max-h-full' />
             </div>
             <div className='w-[500px] mx-auto'>

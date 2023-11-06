@@ -86,10 +86,10 @@ export default function Suggest ({ token, onUserLogin, onFollowToggle, following
       }, [followings, usersNotFiltered, followToggle]);
 
     return (
-        <div className="bg-slate-50  w-1/5  max-w-xs text-sm min-h-screen">
+        <div className="bg-slate-50  w-1/5  max-w-sm text-sm min-h-screen">
            <div className="flex mt-5">
                <div className="mr-2">
-                    <img src={profilePicture || images.profilePicture} alt="profilePicture" className="w-8 h-8 rounded-full object-cover"></img>
+                    <img src={profilePicture || images.profilePicture} alt="profilePicture" className="w-9 h-9 rounded-full object-cover"></img>
                </div>
                <Link to='/user' >
                     <p className="-mb-[4px] font-semibold">{ username }</p>
@@ -103,11 +103,17 @@ export default function Suggest ({ token, onUserLogin, onFollowToggle, following
                {users !== null ? (
                users.map((user) => (
                <div key={user.username}>
-                    <div className="my-4 -mb-[6px] font-medium flex">
-                         <p className="flex-1">{user.username}</p>
+                    <div className="mb-[10px] font-medium flex items-center">
+                         <img src={
+                              user.profilePicture !== 'empty' ?
+                              user.profilePicture :
+                              images.profilePicture} alt="suggestion profilePicture" className="w-8 h-8 rounded-full object-cover mr-2"></img>
+                         <div className="flex-1">
+                              <p >{user.username}</p>
+                              <p className="text-slate-500 text-xss leading-none">Followed by...</p>
+                         </div>
                          <Follow token={token} username={user.username} onFollowToggle={onFollowToggle} />
                     </div>
-                    <p className="text-slate-500 text-xs mt-[5.5px]">Followed by...</p>
                </div>
                ))
                ) : (
