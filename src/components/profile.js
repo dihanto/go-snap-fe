@@ -157,7 +157,7 @@ function UpdateProfile ({ token, userLogin, profilePicture, onToken }){
         <h1 className="text-lg mt-7 ml-4 mb-3">Edit Profile</h1>
         <form onSubmit={handleSubmit}>
           <div className="flex">
-            <img src={profilePicture || images.profilePicture} alt="profile" className="w-9 h-9 my-auto rounded-full mr-4"></img>
+            <img src={ updateProfilePicture ||profilePicture || images.profilePicture} alt="profile" className="w-9 h-9 my-auto rounded-full mr-4"></img>
             <div>
               <p>{userLogin}</p>
               <label htmlFor="profilePicture" className="my-2 cursor-pointer text-blue-600 font-semibold">Change profile picture</label>
