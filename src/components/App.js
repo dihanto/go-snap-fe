@@ -16,8 +16,6 @@ function App() {
   const [followToggle, setFollowToggle] = useState(true);
   const [profilePicture, setProfilePicture] = useState(null)
 
-  console.log(token)
-
   const getFollowing = async () => {
     if (token === undefined){
       return;

@@ -58,7 +58,11 @@ export default function Suggest ({ token, onUserLogin, onFollowToggle, following
      };
    
      const filteredUsers = usersNotFiltered.filter((user) => {
-       return !followings.includes(user.username);
+          if(followings){
+               return !followings.includes(user.username);
+          } else{
+               return usersNotFiltered;
+          }
      });
    
      setUsers(filteredUsers);

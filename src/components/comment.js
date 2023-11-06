@@ -72,6 +72,10 @@ function HandleGetComment({ token, photoId, commentToggle }) {
   const [commentCount, setCommentCount] = useState(0);
 
   useEffect(() => {
+    if(!token){
+      return;
+    }
+    
     async function fetchComments() {
       try {
         const requestOptions = {

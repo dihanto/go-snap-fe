@@ -1,6 +1,6 @@
 export default function SkeletonLoader() {
   return (
-    <div className="w-[1000px]">
+    <div className="w-4/6 mx-auto">
       {[1, 2, 3].map((index) => (
         <div key={index} className="bg-slate-50 pb-3 text-left text-sm animate-pulse">
           <div className="w-[500px] mx-auto">
