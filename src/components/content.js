@@ -1,18 +1,22 @@
-import { useEffect, useState, useCallback, useMemo } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import Like from "./like";
 import { HandleCommentIcon, HandleGetComment, HandleWriteComment } from "./comment";
 import { host } from "./endpoint";
 import SkeletonLoader from "./skeleton";
 import images from "./asset";
 
+const DEBOUNCE_DELAY = 130;
+
 export default function Content({ token }) {
   const [photos, setPhotos] = useState([]);
+  const [availablePhoto, setAvailablePhoto] = useState([]);
   const [likeNumbers, setLikeNumbers] = useState({});
   const [commentToggle, setCommentToggle] = useState(false);
-  const [photosToDisplay, setPhotosToDisplay] = useState(2);
+  const [photosToDisplay, setPhotosToDisplay] = useState(4);
   const [loadingMore, setLoadingMore] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
+  
   const requestOptions = useMemo(() => {
     return {
       method: 'GET',
@@ -23,103 +27,106 @@ export default function Content({ token }) {
     };
   }, [token]);
 
-  const getRandomPhotos = (data, numItems) => {
+  const getRandomPhotos = (data) => {
     const shuffledArray = data.slice().sort(() => Math.random() - 0.5);
-    return shuffledArray.slice(0, numItems);
+    return shuffledArray;
   };
 
-  const fetchPhotos = async (numItems) => {
+  const fetchPhotos = async () => {
     setIsLoading(true);
-    try {
-      const response = await fetch(host.photoEndpoint.getPhoto(), requestOptions);
-      const responseJson = await response.json();
-
-      if (responseJson.status === 200 && responseJson.data) {
-        const randomPhotos = getRandomPhotos(responseJson.data, numItems);
-        setPhotos(randomPhotos);
-
-        const initialLikeNumbers = {};
-        randomPhotos.forEach(photo => {
-          initialLikeNumbers[photo.id] = photo.like.likeCount;
-        });
-        setLikeNumbers(initialLikeNumbers);
-      } else {
-        console.log('Failed to get Photos:', responseJson.message);
-      }
-      setIsLoading(false);
-    } catch (error) {
-      console.error('Error loading photos:', error);
-      setIsLoading(false);
+  
+    const response = await fetch(host.photoEndpoint.getPhoto(), requestOptions);
+    const responseJson = await response.json();
+  
+    if (responseJson.status === 200 && responseJson.data) {
+      const randomPhotos = getRandomPhotos(responseJson.data);
+  
+      const newPhotos = randomPhotos.slice(0, 3);
+      const remainingPhotos = randomPhotos.slice(3);
+  
+      const initialLikeNumbers = newPhotos.reduce((likeNumbers, photo) => {
+        likeNumbers[photo.id] = photo.like.likeCount;
+        return likeNumbers;
+      }, {});
+  
+      setPhotos(newPhotos);
+      setAvailablePhoto(remainingPhotos);
+      setLikeNumbers(initialLikeNumbers);
+    } else {
+      console.log('Failed to get Photos:', responseJson.message);
     }
+    setIsLoading(false);
   };
+  
 
   const loadMorePhotos = useCallback(async () => {
-    if (loadingMore) return;
-
+    if (loadingMore || availablePhoto.length === 0) return;
+  
     setLoadingMore(true);
-
-    try {
-      const response = await fetch(host.photoEndpoint.getPhoto(), requestOptions);
-      const responseJson = await response.json();
-
-      if (responseJson.status === 200 && responseJson.data) {
-        const newRandomPhotos = getRandomPhotos(responseJson.data, 2);
-        const filteredNewPhotos = newRandomPhotos.filter(
-          photo => !photos.find(existingPhoto => existingPhoto.id === photo.id)
-        );
-        const initialLikeNumbers = {}
-        filteredNewPhotos.forEach(photo => {
-          initialLikeNumbers[photo.id] = photo.like.likeCount;
-        });
-        setLikeNumbers(prevLikeNumbers => ({
-          ...prevLikeNumbers,
-          ...initialLikeNumbers,
-        }));
-        setPhotos(prevPhotos => [...prevPhotos, ...filteredNewPhotos]);
-        setPhotosToDisplay(prev => prev + filteredNewPhotos.length);
-
-        setLoadingMore(false);
-      } else {
-        console.log('Failed to get more photos:', responseJson.message);
-      }
-    } catch (error) {
-      console.error('Error loading more photos:', error);
-      setLoadingMore(false);
-    }
-  }, [loadingMore, photos, requestOptions]);
-
+  
+    const newPhotos = availablePhoto.slice(0, 3);
+  
+    const initialLikeNumbers = newPhotos.reduce((likeNumbers, photo) => {
+      likeNumbers[photo.id] = photo.like.likeCount;
+      return likeNumbers;
+    }, {});
+  
+    setLikeNumbers(prevLikeNumbers => ({ ...prevLikeNumbers, ...initialLikeNumbers }));
+    setPhotos(prevPhotos => [...prevPhotos, ...newPhotos]);
+  
+    setAvailablePhoto(prevAvailablePhoto => prevAvailablePhoto.slice(3));
+    setPhotosToDisplay(prev => prev + newPhotos.length);
+  
+    setLoadingMore(false);
+  }, [loadingMore, availablePhoto]);
+  
   const handleScroll = useCallback(() => {
-    if(!token){
-      return
+    if (!token) {
+      return;
     }
     const { innerHeight, scrollY } = window;
     const { offsetHeight } = document.body;
 
-    if (innerHeight + scrollY >= offsetHeight - 200) {
+    if (innerHeight + scrollY >= offsetHeight - 800) {
       loadMorePhotos();
     }
   }, [loadMorePhotos, token]);
 
   useEffect(() => {
     if (!token) return;
-    fetchPhotos(2);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchPhotos();
   }, [token]);
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    let timeoutId;
+
+    const handleScrollDebounced = () => {
+      if (timeoutId){
+        clearTimeout(timeoutId);
+      }
+
+      timeoutId = setTimeout(() => {
+        handleScroll();
+        timeoutId = null
+      }, DEBOUNCE_DELAY);
+    };
+    window.addEventListener('scroll', handleScrollDebounced);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScrollDebounced);
     };
   }, [handleScroll]);
 
   const handleIsLiked = async (photoId) => {
-    const response = await fetch(host.photoEndpoint.likePhoto(photoId), requestOptions);
-    const responseJson = await response.json();
-    if (responseJson.status === 200) {
-      return responseJson.data;
-    } else {
-      console.log('Failed to get like data:', responseJson.message);
+    try {
+      const response = await fetch(host.photoEndpoint.likePhoto(photoId), requestOptions);
+      const responseJson = await response.json();
+      if (responseJson.status === 200) {
+        return responseJson.data;
+      } else {
+        console.log('Failed to get like data:', responseJson.message);
+      }
+    } catch (error) {
+      console.error('Error liking photo:', error);
     }
   };
 
@@ -136,18 +143,17 @@ export default function Content({ token }) {
 
   return (
     <div className='w-4/6 flex-1 mx-auto pt-5'>
-    {isLoading ? (
-      <SkeletonLoader />
-    ) : (
-      photos.slice(0, photosToDisplay).map((photo) => (
+      {isLoading ? (
+        <SkeletonLoader />
+      ) : (
+        photos.slice(0, photosToDisplay).map((photo) => (
           <div key={photo.id} className='bg-slate-50 pb-3 text-left text-sm'>
             <div className='w-[500px] h-[37px] mx-auto items-center flex'>
-              <img src={
-                photo.user.profilePicture !== 'empty'
-                ?
-                photo.user.profilePicture
-                :  images.profilePicture
-                } alt="profile" className="w-8 h-8 object-cover rounded-full mr-2 "></img>
+              <img
+                src={photo.user.profilePicture !== 'empty' ? photo.user.profilePicture : images.profilePicture}
+                alt="profile"
+                className="w-8 h-8 object-cover rounded-full mr-2"
+              />
               <p className='font-semibold'>{photo.user.username}</p>
             </div>
             <div className='flex items-center justify-center w-[500px] h-[500px] bg-black mx-auto mt-1'>
@@ -176,7 +182,8 @@ export default function Content({ token }) {
             </div>
             <div className='border-b border-slate-300 w-[500px] mx-auto'></div>
           </div>
-         )))}
-       </div>
+        ))
+      )}
+    </div>
   );
 }
